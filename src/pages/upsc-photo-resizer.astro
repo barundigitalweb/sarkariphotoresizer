@@ -30,22 +30,43 @@ const upscFaqs = [
   }
 ];
 
-const faqSchema = {
+const pageSchema = {
   "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": upscFaqs.map(faq => ({
-    "@type": "Question",
-    "name": faq.q,
-    "acceptedAnswer": {
-      "@type": "Answer",
-      "text": faq.a
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://sarkariphotoresizer.com"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "UPSC Photo Resizer (Name & Date)",
+          "item": canonicalUrl
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": upscFaqs.map(faq => ({
+        "@type": "Question",
+        "name": faq.q,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": faq.a
+        }
+      }))
     }
-  }))
+  ]
 };
 ---
 
 <Layout title={title} description={description} canonicalUrl={canonicalUrl}>
-  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(pageSchema)} />
 
   <!-- Breadcrumb -->
   <div class="bg-slate-900 border-b border-slate-800 text-xs py-2 px-4">
