@@ -491,89 +491,100 @@ export default function ResizerEngine({
   return (
     <div className="w-full max-w-5xl mx-auto space-y-6">
       {/* 1. Mode Switcher Bar + Language Toggle */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-2.5 bg-slate-900/95 backdrop-blur-md p-2 rounded-2xl shadow-xl border border-slate-800">
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 w-full sm:flex-1">
+      <div className="bg-slate-900/95 backdrop-blur-md p-2.5 sm:p-3 rounded-2xl shadow-xl border border-slate-800 space-y-2">
+        {/* Top Mini-Header: Title + Language Toggle */}
+        <div className="flex items-center justify-between px-1 text-xs">
+          <div className="flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span className="text-[11px] font-black text-slate-300 uppercase tracking-wider">
+              {lang === 'hi' ? 'अपलोड टूल चुनें' : 'Select Resizer Tool'}
+            </span>
+          </div>
+
+          {/* Language Switcher Pill */}
+          <div className="flex items-center gap-0.5 bg-slate-800/90 p-0.5 rounded-xl border border-slate-700/80">
+            <Globe className="w-3.5 h-3.5 text-slate-400 ml-1.5 mr-0.5" />
+            <button
+              type="button"
+              onClick={() => setLang('en')}
+              className={`px-2 py-0.5 rounded-lg text-[10px] font-black transition-colors ${
+                lang === 'en' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              EN
+            </button>
+            <button
+              type="button"
+              onClick={() => setLang('hi')}
+              className={`px-2 py-0.5 rounded-lg text-[10px] font-black transition-colors ${
+                lang === 'hi' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              हिन्दी
+            </button>
+          </div>
+        </div>
+
+        {/* 4 Mode Buttons */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-2">
           <button
             type="button"
             onClick={() => setMode('photo')}
             aria-label="Switch to Passport Photo Resizer mode"
-            className={`flex items-center justify-center gap-1.5 py-2.5 px-2.5 rounded-xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all duration-200 cursor-pointer ${
+            className={`flex items-center justify-center gap-1.5 py-2 px-2 rounded-xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all duration-200 cursor-pointer ${
               mode === 'photo'
-                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-500/25'
-                : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-500/25 ring-2 ring-blue-400/40'
+                : 'bg-slate-800/80 hover:bg-slate-700/80 text-slate-200 hover:text-white border border-slate-700/70'
             }`}
           >
-            <ImageIcon className="w-4 h-4 text-blue-200 shrink-0" />
+            <ImageIcon className={`w-4 h-4 shrink-0 ${mode === 'photo' ? 'text-white' : 'text-blue-400'}`} />
             <span>{lang === 'hi' ? 'फोटो' : 'Photo'}</span>
-            <span className="text-[10px] font-medium opacity-80">(20-50K)</span>
+            <span className="text-[10px] font-medium opacity-85">(20-50K)</span>
           </button>
 
           <button
             type="button"
             onClick={() => setMode('signature')}
             aria-label="Switch to Signature Resizer mode"
-            className={`flex items-center justify-center gap-1.5 py-2.5 px-2.5 rounded-xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all duration-200 cursor-pointer ${
+            className={`flex items-center justify-center gap-1.5 py-2 px-2 rounded-xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all duration-200 cursor-pointer ${
               mode === 'signature'
-                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-500/25'
-                : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+                ? 'bg-gradient-to-r from-teal-600 to-emerald-600 text-white shadow-md shadow-emerald-500/25 ring-2 ring-emerald-400/40'
+                : 'bg-slate-800/80 hover:bg-slate-700/80 text-slate-200 hover:text-white border border-slate-700/70'
             }`}
           >
-            <PenTool className="w-4 h-4 text-blue-200 shrink-0" />
+            <PenTool className={`w-4 h-4 shrink-0 ${mode === 'signature' ? 'text-white' : 'text-teal-400'}`} />
             <span>{lang === 'hi' ? 'हस्ताक्षर' : 'Signature'}</span>
-            <span className="text-[10px] font-medium opacity-80">(10-20K)</span>
+            <span className="text-[10px] font-medium opacity-85">(10-20K)</span>
           </button>
 
           <button
             type="button"
             onClick={() => setMode('document')}
             aria-label="Switch to Doc to PDF Resizer mode"
-            className={`flex items-center justify-center gap-1.5 py-2.5 px-2.5 rounded-xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all duration-200 cursor-pointer ${
+            className={`flex items-center justify-center gap-1.5 py-2 px-2 rounded-xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all duration-200 cursor-pointer ${
               mode === 'document'
-                ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md shadow-emerald-500/25'
-                : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+                ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md shadow-emerald-500/25 ring-2 ring-emerald-400/40'
+                : 'bg-slate-800/80 hover:bg-slate-700/80 text-slate-200 hover:text-white border border-slate-700/70'
             }`}
           >
-            <FileText className="w-4 h-4 text-emerald-200 shrink-0" />
+            <FileText className={`w-4 h-4 shrink-0 ${mode === 'document' ? 'text-white' : 'text-emerald-400'}`} />
             <span>{t.docTab}</span>
-            <span className="text-[10px] font-medium opacity-80">(100-300K)</span>
+            <span className="text-[10px] font-medium opacity-85">(100-300K)</span>
           </button>
 
           <button
             type="button"
             onClick={() => setMode('thumb')}
             aria-label="Switch to Left Thumb Impression LTI mode"
-            className={`flex items-center justify-center gap-1.5 py-2.5 px-2.5 rounded-xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all duration-200 cursor-pointer ${
+            className={`flex items-center justify-center gap-1.5 py-2 px-2 rounded-xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all duration-200 cursor-pointer ${
               mode === 'thumb'
-                ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md shadow-purple-500/25'
-                : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+                ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md shadow-purple-500/25 ring-2 ring-purple-400/40'
+                : 'bg-slate-800/80 hover:bg-slate-700/80 text-slate-200 hover:text-white border border-slate-700/70'
             }`}
           >
-            <Fingerprint className="w-4 h-4 text-purple-200 shrink-0" />
+            <Fingerprint className={`w-4 h-4 shrink-0 ${mode === 'thumb' ? 'text-white' : 'text-purple-400'}`} />
             <span>{lang === 'hi' ? 'अंगूठा' : 'Thumb'}</span>
-            <span className="text-[10px] font-medium opacity-80">(10-50K)</span>
-          </button>
-        </div>
-
-        {/* Language Switcher Pill */}
-        <div className="flex items-center gap-1 bg-slate-800/90 p-1 rounded-xl border border-slate-700/80 shrink-0 self-end sm:self-center">
-          <Globe className="w-3.5 h-3.5 text-slate-400 ml-1.5" />
-          <button
-            type="button"
-            onClick={() => setLang('en')}
-            className={`px-2 py-1 rounded-lg text-[11px] font-black transition-colors ${
-              lang === 'en' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            EN
-          </button>
-          <button
-            type="button"
-            onClick={() => setLang('hi')}
-            className={`px-2 py-1 rounded-lg text-[11px] font-black transition-colors ${
-              lang === 'hi' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            हिन्दी
+            <span className="text-[10px] font-medium opacity-85">(10-50K)</span>
           </button>
         </div>
       </div>
@@ -828,7 +839,7 @@ export default function ResizerEngine({
               onDragOver={(e) => e.preventDefault()}
               onDrop={handleDrop}
               onClick={() => fileInputRef.current?.click()}
-              className="bg-white rounded-3xl p-8 sm:p-12 border-2 border-dashed border-slate-300 hover:border-blue-500 hover:bg-blue-50/20 cursor-pointer transition-all flex flex-col items-center justify-center text-center shadow-xs min-h-[380px]"
+              className="bg-white rounded-3xl p-5 sm:p-12 border-2 border-dashed border-slate-300 hover:border-blue-500 hover:bg-blue-50/20 cursor-pointer transition-all flex flex-col items-center justify-center text-center shadow-xs min-h-[250px] sm:min-h-[380px]"
             >
               <input
                 id="file-upload-input"
@@ -843,16 +854,16 @@ export default function ResizerEngine({
                 onChange={handleFileChange}
                 className="hidden"
               />
-              <div className="w-16 h-16 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mb-4 shadow-inner">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mb-2.5 sm:mb-4 shadow-inner">
                 {mode === 'document' ? (
-                  <FileText className="w-8 h-8" />
+                  <FileText className="w-6 h-6 sm:w-8 sm:h-8" />
                 ) : mode === 'thumb' ? (
-                  <Fingerprint className="w-8 h-8" />
+                  <Fingerprint className="w-6 h-6 sm:w-8 sm:h-8" />
                 ) : (
-                  <Upload className="w-8 h-8" />
+                  <Upload className="w-6 h-6 sm:w-8 sm:h-8" />
                 )}
               </div>
-              <h2 className="text-lg sm:text-xl font-black text-slate-900 mb-1">
+              <h2 className="text-base sm:text-xl font-black text-slate-900 mb-1">
                 {mode === 'document'
                   ? lang === 'hi'
                     ? 'मार्कशीट, प्रमाणपत्र या दस्तावेज़ अपलोड करें'
@@ -863,7 +874,7 @@ export default function ResizerEngine({
                     : 'Upload Thumb Impression (LTI)'
                   : t.uploadHeading(mode === 'photo' ? t.photoTab : t.sigTab)}
               </h2>
-              <p className="text-xs sm:text-sm text-slate-600 max-w-sm mb-4 leading-relaxed">
+              <p className="text-xs sm:text-sm text-slate-600 max-w-sm mb-3 sm:mb-4 leading-relaxed">
                 {mode === 'document'
                   ? lang === 'hi'
                     ? 'फोटो (JPG, PNG) या PDF फ़ाइल दोनों समर्थित हैं। स्वतः 100-300 KB PDF में बदल जाएगी।'
@@ -877,7 +888,7 @@ export default function ResizerEngine({
               <button
                 type="button"
                 aria-label="Choose file from your phone or computer"
-                className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm px-6 py-2.5 rounded-xl shadow-md transition-all cursor-pointer"
+                className="bg-blue-600 hover:bg-blue-700 text-white font-black text-xs sm:text-sm px-6 py-2.5 rounded-xl shadow-md transition-all cursor-pointer"
               >
                 {t.chooseBtn}
               </button>

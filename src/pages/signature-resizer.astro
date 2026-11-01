@@ -78,33 +78,33 @@ const pageSchema = {
   </div>
 
   <!-- Hero Header Section -->
-  <section class="relative bg-gradient-to-b from-blue-900 via-slate-900 to-slate-900 text-white pt-6 pb-14 sm:pt-10 sm:pb-20 px-4 overflow-hidden">
-    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-blue-500/10 blur-3xl pointer-events-none rounded-full"></div>
+  <section class="relative bg-gradient-to-b from-blue-700 via-blue-800 to-slate-900 text-white pt-4 pb-8 sm:pt-10 sm:pb-20 px-4 overflow-hidden">
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-blue-400/15 blur-3xl pointer-events-none rounded-full"></div>
 
-    <div class="max-w-4xl mx-auto text-center relative z-10 space-y-3">
-      <div class="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 text-emerald-200 px-3 py-0.5 rounded-full text-xs font-black uppercase tracking-wider backdrop-blur-md">
+    <div class="max-w-4xl mx-auto text-center relative z-10 space-y-2 sm:space-y-3.5">
+      <div class="inline-flex items-center gap-1.5 bg-emerald-500/25 border border-emerald-400/40 text-emerald-100 px-3 py-0.5 rounded-full text-[10px] sm:text-xs font-black uppercase tracking-wider backdrop-blur-md">
         <span>✍️ 10 KB - 20 KB Signature Optimizer</span>
       </div>
 
-      <h1 class="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight">
-        Online <span class="bg-gradient-to-r from-emerald-400 via-teal-300 to-sky-300 bg-clip-text text-transparent">Signature Resizer</span> 10 to 20 KB
+      <h1 class="text-xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight">
+        Online <span class="bg-gradient-to-r from-emerald-200 via-teal-200 to-white bg-clip-text text-transparent">Signature Resizer</span> 10 to 20 KB
       </h1>
 
-      <p class="text-xs sm:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed">
+      <p class="text-xs sm:text-base text-blue-100/90 max-w-2xl mx-auto leading-relaxed">
         Eliminate mobile phone shadows, remove grey paper backgrounds, and compress signatures into the exact <strong class="text-white">10 KB to 20 KB</strong> boundary for all competitive exams.
       </p>
 
-      <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-4 pt-1 text-[11px] sm:text-xs text-slate-300 font-semibold">
-        <span class="inline-flex items-center gap-1 bg-slate-800/80 px-2.5 py-1 rounded-lg border border-slate-700/60">
-          <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-          <span>Auto Shadow &amp; Grey Tint Remover</span>
+      <div class="flex flex-wrap items-center justify-center gap-1.5 sm:gap-3 pt-0.5 text-[10px] sm:text-xs text-blue-100 font-semibold">
+        <span class="inline-flex items-center gap-1 bg-blue-900/60 px-2 py-0.5 rounded-lg border border-blue-500/30">
+          <Sparkles className="w-3 h-3 text-amber-400" />
+          <span>Auto Shadow Remover</span>
         </span>
-        <span class="inline-flex items-center gap-1 bg-slate-800/80 px-2.5 py-1 rounded-lg border border-slate-700/60">
-          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-          <span>Strict 10.0 KB Minimum Lock</span>
+        <span class="inline-flex items-center gap-1 bg-blue-900/60 px-2 py-0.5 rounded-lg border border-blue-500/30">
+          <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+          <span>Strict 10-20 KB Lock</span>
         </span>
-        <span class="inline-flex items-center gap-1 bg-slate-800/80 px-2.5 py-1 rounded-lg border border-slate-700/60">
-          <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
+        <span class="inline-flex items-center gap-1 bg-blue-900/60 px-2 py-0.5 rounded-lg border border-blue-500/30">
+          <ShieldCheck className="w-3 h-3 text-sky-400" />
           <span>100% Client-Side Private</span>
         </span>
       </div>
@@ -112,7 +112,7 @@ const pageSchema = {
   </section>
 
   <!-- Interactive Resizer Tool Container -->
-  <section id="tool" class="max-w-6xl mx-auto px-4 -mt-8 sm:-mt-12 relative z-20 mb-12 sm:mb-16">
+  <section id="tool" class="max-w-6xl mx-auto px-4 -mt-5 sm:-mt-12 relative z-20 mb-10 sm:mb-16">
     <ResizerEngine client:idle initialMode="signature" initialPresetId="ssc" />
   </section>
 
