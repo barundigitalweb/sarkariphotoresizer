@@ -1,0 +1,271 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ResizerEngine from '../components/ResizerEngine';
+import { CheckCircle2, ShieldCheck, Zap, Info, Check, X, PenTool, Sparkles, Sliders, ArrowRight } from 'lucide-react';
+
+const title = "Signature Resizer 10 to 20 KB Online | Free Exam Signature Crop & Clean";
+const description = "Free online Signature Resizer 10 to 20 KB for SSC, RRB, UPSC, IBPS, and State Police exams. Automatically removes mobile shadows, cleans paper background, and locks file size.";
+const canonicalUrl = "https://sarkariphotoresizer.com/signature-resizer";
+
+const signatureFaqs = [
+  {
+    q: "Why do government recruitment portals strictly require signatures between 10 KB and 20 KB?",
+    a: "Government examination servers (like SSC, IBPS, and State PSCs) store millions of candidate records. A 10 KB - 20 KB limit ensures signatures are small enough for database scalability while retaining sufficient resolution for biometric and invigilator signature matching."
+  },
+  {
+    q: "How does the background cleaning tool remove shadows from mobile photos?",
+    a: "Our client-side processing engine analyzes luminance variations across the uploaded photo. It flattens uneven shadows, eliminates grey paper tint, and boosts stroke contrast to render pure dark ink over an immaculate white background."
+  },
+  {
+    q: "Can I sign in blue ink, or is black ink mandatory?",
+    a: "While some exams accept blue ink, most examination bodies (including SSC, UPSC, and Banking exams) strictly mandate a dark black ballpoint pen on plain white paper. Black ink provides superior optical scanning clarity."
+  },
+  {
+    q: "Why are signatures in capital (BLOCK) letters rejected?",
+    a: "Writing your name in full capital letters (e.g. 'RAHUL SHARMA') is considered a name print, not an authentic signature. Examination authorities reject printed letters because they lack unique individual biometric cursive characteristics."
+  },
+  {
+    q: "What if my signature file compresses to below 10 KB?",
+    a: "Most portals will reject files under 10.0 KB with an error like 'File size too small'. Our resizer incorporates intelligent lossless padding to guarantee your file always stays comfortably within the 10.0 KB to 20.0 KB range."
+  }
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": signatureFaqs.map(faq => ({
+    "@type": "Question",
+    "name": faq.q,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": faq.a
+    }
+  }))
+};
+---
+
+<Layout title={title} description={description} canonicalUrl={canonicalUrl}>
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <!-- Breadcrumb -->
+  <div class="bg-slate-900 border-b border-slate-800 text-xs py-2 px-4">
+    <div class="max-w-6xl mx-auto flex items-center gap-2 text-slate-400">
+      <a href="/" class="hover:text-white transition-colors">Home</a>
+      <span>/</span>
+      <span class="text-blue-400 font-semibold">Signature Resizer (10 KB - 20 KB)</span>
+    </div>
+  </div>
+
+  <!-- Hero Header Section -->
+  <section class="relative bg-gradient-to-b from-blue-900 via-slate-900 to-slate-900 text-white pt-6 pb-14 sm:pt-10 sm:pb-20 px-4 overflow-hidden">
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-blue-500/10 blur-3xl pointer-events-none rounded-full"></div>
+
+    <div class="max-w-4xl mx-auto text-center relative z-10 space-y-3">
+      <div class="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 text-emerald-200 px-3 py-0.5 rounded-full text-xs font-black uppercase tracking-wider backdrop-blur-md">
+        <span>✍️ 10 KB - 20 KB Signature Optimizer</span>
+      </div>
+
+      <h1 class="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight">
+        Online <span class="bg-gradient-to-r from-emerald-400 via-teal-300 to-sky-300 bg-clip-text text-transparent">Signature Resizer</span> 10 to 20 KB
+      </h1>
+
+      <p class="text-xs sm:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed">
+        Eliminate mobile phone shadows, remove grey paper backgrounds, and compress signatures into the exact <strong class="text-white">10 KB to 20 KB</strong> boundary for all competitive exams.
+      </p>
+
+      <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-4 pt-1 text-[11px] sm:text-xs text-slate-300 font-semibold">
+        <span class="inline-flex items-center gap-1 bg-slate-800/80 px-2.5 py-1 rounded-lg border border-slate-700/60">
+          <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+          <span>Auto Shadow &amp; Grey Tint Remover</span>
+        </span>
+        <span class="inline-flex items-center gap-1 bg-slate-800/80 px-2.5 py-1 rounded-lg border border-slate-700/60">
+          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+          <span>Strict 10.0 KB Minimum Lock</span>
+        </span>
+        <span class="inline-flex items-center gap-1 bg-slate-800/80 px-2.5 py-1 rounded-lg border border-slate-700/60">
+          <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
+          <span>100% Client-Side Private</span>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Resizer Tool Container -->
+  <section id="tool" class="max-w-6xl mx-auto px-4 -mt-8 sm:-mt-12 relative z-20 mb-12 sm:mb-16">
+    <ResizerEngine client:idle initialMode="signature" initialPresetId="ssc" />
+  </section>
+
+  <!-- Content Guide Section -->
+  <div class="max-w-6xl mx-auto px-4 space-y-12 pb-16">
+    <!-- Exam Signature Comparison Table -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-6">
+      <div class="max-w-2xl">
+        <span class="text-xs font-black text-blue-600 uppercase tracking-wider">Exam Specification Standards</span>
+        <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1">
+          Signature Size Requirements Across All Major Exams
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-600 mt-2">
+          Compare the required signature dimensions and file sizes before uploading to your recruitment portal:
+        </p>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-xs text-left border-collapse">
+          <thead>
+            <tr class="bg-slate-50 text-slate-700 border-b border-slate-200">
+              <th class="py-3 px-4 font-black">Examination Board</th>
+              <th class="py-3 px-4 font-black">Required File Size</th>
+              <th class="py-3 px-4 font-black">Dimensions (Pixels)</th>
+              <th class="py-3 px-4 font-black">Dimensions (cm)</th>
+              <th class="py-3 px-4 font-black">Pen &amp; Paper Spec</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            <tr class="hover:bg-slate-50/60">
+              <td class="py-3 px-4 font-bold text-slate-900">SSC (CGL, CHSL, MTS, GD, CPO)</td>
+              <td class="py-3 px-4 font-black text-emerald-600">10 KB to 20 KB</td>
+              <td class="py-3 px-4 text-slate-700">400 × 200 px</td>
+              <td class="py-3 px-4 text-slate-700">4.0 × 2.0 cm</td>
+              <td class="py-3 px-4 text-slate-600">Black ink, white paper</td>
+            </tr>
+            <tr class="hover:bg-slate-50/60">
+              <td class="py-3 px-4 font-bold text-slate-900">Railway RRB (ALP, NTPC, Group D)</td>
+              <td class="py-3 px-4 font-black text-blue-600">15 KB to 30 KB</td>
+              <td class="py-3 px-4 text-slate-700">350 × 150 px</td>
+              <td class="py-3 px-4 text-slate-700">3.5 × 1.5 cm</td>
+              <td class="py-3 px-4 text-slate-600">Dark blue/black ink</td>
+            </tr>
+            <tr class="hover:bg-slate-50/60">
+              <td class="py-3 px-4 font-bold text-slate-900">Banking (IBPS PO/Clerk, SBI PO)</td>
+              <td class="py-3 px-4 font-black text-emerald-600">10 KB to 20 KB</td>
+              <td class="py-3 px-4 text-slate-700">140 × 60 px</td>
+              <td class="py-3 px-4 text-slate-700">3.0 × 1.5 cm</td>
+              <td class="py-3 px-4 text-slate-600">Black ink strictly</td>
+            </tr>
+            <tr class="hover:bg-slate-50/60">
+              <td class="py-3 px-4 font-bold text-slate-900">UPSC (Civil Services, NDA, CDS)</td>
+              <td class="py-3 px-4 font-black text-purple-600">20 KB to 300 KB</td>
+              <td class="py-3 px-4 text-slate-700">Min 350 × 350 px</td>
+              <td class="py-3 px-4 text-slate-700">Square or 4.0 × 2.0 cm</td>
+              <td class="py-3 px-4 text-slate-600">Black ballpoint pen</td>
+            </tr>
+            <tr class="hover:bg-slate-50/60">
+              <td class="py-3 px-4 font-bold text-slate-900">NTA (NEET UG, JEE Main)</td>
+              <td class="py-3 px-4 font-black text-amber-600">4 KB to 30 KB</td>
+              <td class="py-3 px-4 text-slate-700">400 × 150 px</td>
+              <td class="py-3 px-4 text-slate-700">4.0 × 1.5 cm</td>
+              <td class="py-3 px-4 text-slate-600">Black ballpoint pen</td>
+            </tr>
+            <tr class="hover:bg-slate-50/60">
+              <td class="py-3 px-4 font-bold text-slate-900">State Police (UP, Bihar, WB)</td>
+              <td class="py-3 px-4 font-black text-emerald-600">5 KB to 20 KB</td>
+              <td class="py-3 px-4 text-slate-700">300 × 120 px</td>
+              <td class="py-3 px-4 text-slate-700">3.5 × 1.5 cm</td>
+              <td class="py-3 px-4 text-slate-600">Clean contrast pen</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Mobile Photography Tips for Clean Signatures -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-6">
+      <div class="max-w-2xl">
+        <span class="text-xs font-black text-emerald-600 uppercase tracking-wider">Mobile Camera Guide</span>
+        <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1">
+          How to Capture a Flawless Signature Using Your Smartphone
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-600 mt-2">
+          Avoid costly trips to the cyber cafe by following these 4 golden rules when taking a picture of your signature:
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-2">
+          <div class="font-bold text-slate-900 text-sm flex items-center gap-2">
+            <span class="w-6 h-6 rounded-md bg-blue-600 text-white flex items-center justify-center text-xs">1</span>
+            <span>Use Plain Unruled White Paper</span>
+          </div>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Never sign on lined notebook paper, ruled registers, or colored paper. Use a fresh sheet of unruled white printer paper (A4 standard) for clean separation.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-2">
+          <div class="font-bold text-slate-900 text-sm flex items-center gap-2">
+            <span class="w-6 h-6 rounded-md bg-blue-600 text-white flex items-center justify-center text-xs">2</span>
+            <span>Use a Dark Black Ballpoint Pen</span>
+          </div>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Avoid faint pencils, light ink pens, or fountain pens that bleed into paper fibers. A thick 0.7mm or 1.0mm black ballpoint pen produces the best digital ink scan.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-2">
+          <div class="font-bold text-slate-900 text-sm flex items-center gap-2">
+            <span class="w-6 h-6 rounded-md bg-blue-600 text-white flex items-center justify-center text-xs">3</span>
+            <span>Eliminate Overhead Mobile Shadows</span>
+          </div>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Hold your smartphone parallel to the paper near a window or natural room lighting. Make sure your hand or phone does not cast a dark shadow across the ink.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-2">
+          <div class="font-bold text-slate-900 text-sm flex items-center gap-2">
+            <span class="w-6 h-6 rounded-md bg-blue-600 text-white flex items-center justify-center text-xs">4</span>
+            <span>Enable Our Automatic Signature Cleaner</span>
+          </div>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Keep the "Clean Signature Background" switch turned ON in our tool. It will automatically boost ink contrast and bleach background noise to pure RGB(255,255,255).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQs -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-6">
+      <div>
+        <span class="text-xs font-black text-blue-600 uppercase tracking-wider">Help &amp; Answers</span>
+        <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1">
+          Frequently Asked Questions About Signature Resizing
+        </h2>
+      </div>
+
+      <div class="space-y-4">
+        {signatureFaqs.map((faq) => (
+          <details class="group border border-slate-200 rounded-2xl p-4 [&_summary::-webkit-details-marker]:hidden bg-slate-50/50">
+            <summary class="flex items-center justify-between cursor-pointer font-bold text-slate-900 text-sm sm:text-base">
+              <span>{faq.q}</span>
+              <span class="text-blue-600 group-open:rotate-180 transition-transform text-lg ml-2">▾</span>
+            </summary>
+            <p class="mt-3 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-200/60 pt-3">
+              {faq.a}
+            </p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <!-- Navigation Hub -->
+    <section class="bg-gradient-to-r from-blue-900 to-indigo-900 text-white rounded-3xl p-6 sm:p-8 space-y-4">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+          <h3 class="text-lg font-black">Need to Resize Your Passport Photo as well?</h3>
+          <p class="text-xs text-slate-300 mt-1">Get your passport photo resized and locked between 20 KB and 50 KB:</p>
+        </div>
+        <div class="flex flex-wrap gap-2 text-xs">
+          <a href="/ssc-photo-resizer" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 font-bold transition-colors">
+            SSC Photo Resizer (20-50 KB) →
+          </a>
+          <a href="/upsc-photo-resizer" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 font-bold transition-colors">
+            UPSC Resizer (Name &amp; Date) →
+          </a>
+          <a href="/railway-photo-resizer" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 font-bold transition-colors">
+            Railway RRB Resizer →
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+</Layout>

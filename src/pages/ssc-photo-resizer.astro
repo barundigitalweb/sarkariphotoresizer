@@ -1,0 +1,314 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ResizerEngine from '../components/ResizerEngine';
+import { CheckCircle2, AlertTriangle, ShieldCheck, Zap, HelpCircle, FileCheck, Info, Check, X, ArrowRight, Camera } from 'lucide-react';
+
+const title = "SSC Photo & Signature Resizer 2026 | 20KB-50KB Photo & 10KB-20KB Sign";
+const description = "Free online SSC Photo and Signature Resizer for SSC CGL, CHSL, MTS, GD Constable, and CPO 2026. Automatically locks photo to 20KB-50KB (3.5x4.5cm) and signature to 10KB-20KB.";
+const canonicalUrl = "https://sarkariphotoresizer.com/ssc-photo-resizer";
+
+const sscFaqs = [
+  {
+    q: "What is the official photo size and dimension for SSC exams in 2026?",
+    a: "The official Staff Selection Commission (SSC) photo specifications require an image with dimensions of 3.5 cm width × 4.5 cm height (approximately 350 × 450 pixels) and a file size strictly between 20 KB and 50 KB in JPEG/JPG format."
+  },
+  {
+    q: "What are the SSC signature size and format requirements?",
+    a: "SSC requires candidates to upload a scanned signature with dimensions of 4.0 cm width × 2.0 cm height (approximately 400 × 200 pixels) and a file size strictly between 10 KB and 20 KB in JPEG/JPG format, signed in black ink on white paper."
+  },
+  {
+    q: "Does SSC allow spectacles, caps, or colored glasses in the photograph?",
+    a: "No. SSC explicitly rejects applications containing photographs with spectacles, eyeglasses, reading glasses, caps, hats, or masks. Both ears must be clearly visible and the candidate must face directly forward into the camera."
+  },
+  {
+    q: "Is Date of Photo (DOP) or Name mandatory on SSC photos?",
+    a: "As per the latest SSC official recruitment notifications, printing the candidate's name and Date of Photo (DOP) on the photograph is no longer mandatory unless explicitly specified in a particular regional notification. A plain photo with light background without glasses is preferred."
+  },
+  {
+    q: "How does the new SSC live webcam capture affect photo and signature upload?",
+    a: "While the new portal (ssc.gov.in) utilizes a live webcam capture for photographs in CGL/CHSL/MTS, scanned signature upload (10 KB to 20 KB) remains 100% mandatory for every application. Furthermore, a properly resized 20KB-50KB passport photograph is required for offline verification, correction windows, admit card copies, and regional department formalities."
+  }
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": sscFaqs.map(faq => ({
+    "@type": "Question",
+    "name": faq.q,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": faq.a
+    }
+  }))
+};
+---
+
+<Layout title={title} description={description} canonicalUrl={canonicalUrl}>
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <!-- Breadcrumb -->
+  <div class="bg-slate-900 border-b border-slate-800 text-xs py-2 px-4">
+    <div class="max-w-6xl mx-auto flex items-center gap-2 text-slate-400">
+      <a href="/" class="hover:text-white transition-colors">Home</a>
+      <span>/</span>
+      <span class="text-blue-400 font-semibold">SSC Photo &amp; Signature Resizer</span>
+    </div>
+  </div>
+
+  <!-- Hero Header Section -->
+  <section class="relative bg-gradient-to-b from-blue-900 via-slate-900 to-slate-900 text-white pt-6 pb-14 sm:pt-10 sm:pb-20 px-4 overflow-hidden">
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-blue-500/10 blur-3xl pointer-events-none rounded-full"></div>
+
+    <div class="max-w-4xl mx-auto text-center relative z-10 space-y-3">
+      <div class="inline-flex items-center gap-2 bg-blue-500/20 border border-blue-400/30 text-blue-200 px-3 py-0.5 rounded-full text-xs font-black uppercase tracking-wider backdrop-blur-md">
+        <span>⚡ SSC CGL • CHSL • MTS • GD • CPO 2026</span>
+      </div>
+
+      <h1 class="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight">
+        SSC Photo &amp; Signature <span class="bg-gradient-to-r from-blue-400 via-sky-300 to-indigo-300 bg-clip-text text-transparent">Resizer 2026</span>
+      </h1>
+
+      <p class="text-xs sm:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed">
+        Quickly resize your passport photo to <strong class="text-white">20 KB - 50 KB</strong> (3.5×4.5 cm) and signature to <strong class="text-white">10 KB - 20 KB</strong> (4.0×2.0 cm) adhering to official Staff Selection Commission guidelines.
+      </p>
+
+      <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-4 pt-1 text-[11px] sm:text-xs text-slate-300 font-semibold">
+        <span class="inline-flex items-center gap-1 bg-slate-800/80 px-2.5 py-1 rounded-lg border border-slate-700/60">
+          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+          <span>Official 20-50 KB Photo Lock</span>
+        </span>
+        <span class="inline-flex items-center gap-1 bg-slate-800/80 px-2.5 py-1 rounded-lg border border-slate-700/60">
+          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+          <span>10-20 KB Signature Lock</span>
+        </span>
+        <span class="inline-flex items-center gap-1 bg-slate-800/80 px-2.5 py-1 rounded-lg border border-slate-700/60">
+          <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
+          <span>100% Client-Side Private</span>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Resizer Tool Container -->
+  <section id="tool" class="max-w-6xl mx-auto px-4 -mt-8 sm:-mt-12 relative z-20 mb-12 sm:mb-16">
+    <ResizerEngine client:idle initialPresetId="ssc" initialMode="photo" />
+  </section>
+
+  <!-- SSC In-Depth Technical Guide Section -->
+  <div class="max-w-6xl mx-auto px-4 space-y-12 pb-16">
+    <!-- Notice Box: Live Photo vs Scanned Signature -->
+    <div class="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-5 text-slate-800 flex items-start gap-3.5">
+      <div class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-800 flex items-center justify-center shrink-0 mt-0.5">
+        <Info className="w-5 h-5 text-amber-700" />
+      </div>
+      <div class="space-y-1 text-xs sm:text-sm">
+        <h2 class="font-bold text-amber-950 text-sm sm:text-base">Important Update for SSC Portal (ssc.gov.in) Applicants</h2>
+        <p class="text-amber-900 leading-relaxed">
+          While the updated SSC portal features a live webcam module for photo capture during certain exams, <strong>scanned signature upload (10 KB to 20 KB) is 100% mandatory</strong> for all candidates. Additionally, pre-resized 20KB-50KB passport photos are strictly required for SSC regional recruitment forms, admit card rectification, offline documentation, and application verification.
+        </p>
+      </div>
+    </div>
+
+    <!-- Official SSC Dimension Summary Cards -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Photo Card -->
+      <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-4">
+        <div class="flex items-center justify-between">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-700 font-bold text-xs uppercase tracking-wider">
+            📷 SSC Passport Photo Rules
+          </span>
+          <span class="text-xs font-black text-slate-400">3.5 × 4.5 cm</span>
+        </div>
+
+        <h3 class="text-xl font-black text-slate-900">Official Photograph Requirements</h3>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-xs text-left border-collapse">
+            <tbody>
+              <tr class="border-b border-slate-100">
+                <td class="py-2.5 font-bold text-slate-600">File Size Range</td>
+                <td class="py-2.5 font-black text-blue-600">20.0 KB to 50.0 KB</td>
+              </tr>
+              <tr class="border-b border-slate-100">
+                <td class="py-2.5 font-bold text-slate-600">Dimensions (Pixels)</td>
+                <td class="py-2.5 font-bold text-slate-900">350 px (W) × 450 px (H)</td>
+              </tr>
+              <tr class="border-b border-slate-100">
+                <td class="py-2.5 font-bold text-slate-600">Dimensions (Centimeters)</td>
+                <td class="py-2.5 font-bold text-slate-900">3.5 cm (W) × 4.5 cm (H)</td>
+              </tr>
+              <tr class="border-b border-slate-100">
+                <td class="py-2.5 font-bold text-slate-600">Accepted Format</td>
+                <td class="py-2.5 font-bold text-slate-900">JPEG / JPG only</td>
+              </tr>
+              <tr class="border-b border-slate-100">
+                <td class="py-2.5 font-bold text-slate-600">Background Color</td>
+                <td class="py-2.5 font-bold text-slate-900">Plain white or very light background</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 font-bold text-slate-600">Facial Features</td>
+                <td class="py-2.5 font-bold text-slate-900">Both ears visible, straight look, no spectacles</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Signature Card -->
+      <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-4">
+        <div class="flex items-center justify-between">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 font-bold text-xs uppercase tracking-wider">
+            ✍️ SSC Signature Rules
+          </span>
+          <span class="text-xs font-black text-slate-400">4.0 × 2.0 cm</span>
+        </div>
+
+        <h3 class="text-xl font-black text-slate-900">Official Signature Requirements</h3>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-xs text-left border-collapse">
+            <tbody>
+              <tr class="border-b border-slate-100">
+                <td class="py-2.5 font-bold text-slate-600">File Size Range</td>
+                <td class="py-2.5 font-black text-emerald-600">10.0 KB to 20.0 KB</td>
+              </tr>
+              <tr class="border-b border-slate-100">
+                <td class="py-2.5 font-bold text-slate-600">Dimensions (Pixels)</td>
+                <td class="py-2.5 font-bold text-slate-900">400 px (W) × 200 px (H)</td>
+              </tr>
+              <tr class="border-b border-slate-100">
+                <td class="py-2.5 font-bold text-slate-600">Dimensions (Centimeters)</td>
+                <td class="py-2.5 font-bold text-slate-900">4.0 cm (W) × 2.0 cm (H)</td>
+              </tr>
+              <tr class="border-b border-slate-100">
+                <td class="py-2.5 font-bold text-slate-600">Accepted Format</td>
+                <td class="py-2.5 font-bold text-slate-900">JPEG / JPG only</td>
+              </tr>
+              <tr class="border-b border-slate-100">
+                <td class="py-2.5 font-bold text-slate-600">Ink &amp; Paper</td>
+                <td class="py-2.5 font-bold text-slate-900">Black/Blue ballpoint ink on clean white paper</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 font-bold text-slate-600">Capital Letters Warning</td>
+                <td class="py-2.5 font-bold text-slate-900">Do NOT sign in all capital (BLOCK) letters</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Do's and Don'ts for SSC Applications -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-6">
+      <div class="max-w-2xl">
+        <span class="text-xs font-black text-blue-600 uppercase tracking-wider">SSC Rejection Prevention Guide</span>
+        <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1">
+          Top Reasons Why SSC Rejects Candidate Photos &amp; Signatures
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-600 mt-2">
+          Thousands of SSC CGL, CHSL, and MTS applications are cancelled every year during scrutiny due to simple image defects. Follow these rules to guarantee 100% portal acceptance:
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Do's -->
+        <div class="p-5 rounded-2xl bg-emerald-50/60 border border-emerald-200/80 space-y-3">
+          <div class="flex items-center gap-2 text-emerald-800 font-black text-sm">
+            <Check className="w-5 h-5 text-emerald-600" />
+            <span>Acceptable Photo &amp; Signature Criteria</span>
+          </div>
+          <ul class="space-y-2 text-xs text-slate-700">
+            <li class="flex items-start gap-2">
+              <span class="text-emerald-600 font-bold">✓</span>
+              <span><strong>Pure white or light grey background:</strong> Ensure there are no patterns, trees, or wallpapers behind you.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-emerald-600 font-bold">✓</span>
+              <span><strong>Face directly into the camera:</strong> Both ears, forehead, and shoulders should be equally illuminated and balanced.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-emerald-600 font-bold">✓</span>
+              <span><strong>File size precisely locked:</strong> Photo between 20.0 KB and 50.0 KB; signature between 10.0 KB and 20.0 KB.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-emerald-600 font-bold">✓</span>
+              <span><strong>Natural running handwriting:</strong> Sign in running cursive handwriting using a dark black or blue pen.</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Don'ts -->
+        <div class="p-5 rounded-2xl bg-rose-50/60 border border-rose-200/80 space-y-3">
+          <div class="flex items-center gap-2 text-rose-800 font-black text-sm">
+            <X className="w-5 h-5 text-rose-600" />
+            <span>Guaranteed Rejection Pitfalls</span>
+          </div>
+          <ul class="space-y-2 text-xs text-slate-700">
+            <li class="flex items-start gap-2">
+              <span class="text-rose-600 font-bold">✗</span>
+              <span><strong>Wearing spectacles or glasses:</strong> Even prescription eyesight spectacles are prohibited by SSC to prevent flash glare.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-rose-600 font-bold">✗</span>
+              <span><strong>Wearing caps, hats, or headgear:</strong> Any head covering that casts a shadow on the face or obscures the hairline is rejected.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-rose-600 font-bold">✗</span>
+              <span><strong>Signatures in capital/block letters:</strong> SSC immediately rejects signatures written as "A-M-I-T K-U-M-A-R".</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-rose-600 font-bold">✗</span>
+              <span><strong>Blurry selfie or extreme angle:</strong> Side poses, tilted heads, selfies, or filtered social media photos are strictly forbidden.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Accordion Section -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-6">
+      <div>
+        <span class="text-xs font-black text-blue-600 uppercase tracking-wider">Frequently Asked Questions</span>
+        <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1">
+          SSC Photo &amp; Signature Resizing FAQs
+        </h2>
+      </div>
+
+      <div class="space-y-4">
+        {sscFaqs.map((faq, idx) => (
+          <details class="group border border-slate-200 rounded-2xl p-4 [&_summary::-webkit-details-marker]:hidden bg-slate-50/50">
+            <summary class="flex items-center justify-between cursor-pointer font-bold text-slate-900 text-sm sm:text-base">
+              <span>{faq.q}</span>
+              <span class="text-blue-600 group-open:rotate-180 transition-transform text-lg ml-2">▾</span>
+            </summary>
+            <p class="mt-3 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-200/60 pt-3">
+              {faq.a}
+            </p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <!-- Fast Link Hub to Other Exam Tools -->
+    <section class="bg-gradient-to-r from-blue-900 to-indigo-900 text-white rounded-3xl p-6 sm:p-8 space-y-4">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+          <h3 class="text-lg font-black">Applying for other Government Recruitment Portals?</h3>
+          <p class="text-xs text-slate-300 mt-1">Switch to our other exam-tuned presets with one tap:</p>
+        </div>
+        <div class="flex flex-wrap gap-2 text-xs">
+          <a href="/upsc-photo-resizer" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 font-bold transition-colors">
+            UPSC Resizer (Name &amp; Date) →
+          </a>
+          <a href="/railway-photo-resizer" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 font-bold transition-colors">
+            Railway RRB Resizer →
+          </a>
+          <a href="/signature-resizer" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 font-bold transition-colors">
+            Signature Resizer (10-20 KB) →
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+</Layout>

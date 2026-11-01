@@ -23,9 +23,19 @@ import {
   Star
 } from 'lucide-react';
 
-export default function ResizerEngine() {
-  const [mode, setMode] = useState<'photo' | 'signature'>('photo');
-  const [selectedPresetId, setSelectedPresetId] = useState<string>('ssc');
+export interface ResizerEngineProps {
+  initialMode?: 'photo' | 'signature';
+  initialPresetId?: string;
+  initialAddDop?: boolean;
+}
+
+export default function ResizerEngine({
+  initialMode = 'photo',
+  initialPresetId = 'ssc',
+  initialAddDop
+}: ResizerEngineProps = {}) {
+  const [mode, setMode] = useState<'photo' | 'signature'>(initialMode);
+  const [selectedPresetId, setSelectedPresetId] = useState<string>(initialPresetId);
   const [file, setFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [result, setResult] = useState<ProcessImageResult | null>(null);
@@ -34,19 +44,25 @@ export default function ResizerEngine() {
 
   // Preset settings
   const currentPreset = EXAM_PRESETS.find((p) => p.id === selectedPresetId) || EXAM_PRESETS[0];
+  const initialPresetConfig = EXAM_PRESETS.find((p) => p.id === initialPresetId) || EXAM_PRESETS[0];
+  const startConfig = initialMode === 'photo' ? initialPresetConfig.photo : initialPresetConfig.signature;
 
   // Custom adjustable parameters
-  const [targetWidth, setTargetWidth] = useState<number>(350);
-  const [targetHeight, setTargetHeight] = useState<number>(450);
-  const [minKb, setMinKb] = useState<number>(20);
-  const [maxKb, setMaxKb] = useState<number>(50);
+  const [targetWidth, setTargetWidth] = useState<number>(startConfig.widthPx);
+  const [targetHeight, setTargetHeight] = useState<number>(startConfig.heightPx);
+  const [minKb, setMinKb] = useState<number>(startConfig.minKb);
+  const [maxKb, setMaxKb] = useState<number>(startConfig.maxKb);
 
   // Rotation & Zoom
   const [rotation, setRotation] = useState<number>(0);
   const [zoom, setZoom] = useState<number>(1.0);
 
   // DOP (Date of Photo) parameters
-  const [addDop, setAddDop] = useState<boolean>(false);
+  const [addDop, setAddDop] = useState<boolean>(
+    initialAddDop !== undefined
+      ? initialAddDop
+      : Boolean(initialMode === 'photo' && initialPresetConfig.photo.requiresDop)
+  );
   const [candidateName, setCandidateName] = useState<string>('');
   const [photoDate, setPhotoDate] = useState<string>(() => {
     const d = new Date();
@@ -94,7 +110,11 @@ export default function ResizerEngine() {
     setTargetHeight(config.heightPx);
     setMinKb(config.minKb);
     setMaxKb(config.maxKb);
-    setAddDop(Boolean(mode === 'photo' && currentPreset.photo.requiresDop));
+    if (initialAddDop !== undefined && selectedPresetId === initialPresetId && mode === initialMode) {
+      setAddDop(initialAddDop);
+    } else {
+      setAddDop(Boolean(mode === 'photo' && currentPreset.photo.requiresDop));
+    }
   }, [selectedPresetId, mode]);
 
   // Clean up object URLs on unmount

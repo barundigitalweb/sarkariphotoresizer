@@ -1,0 +1,306 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ResizerEngine from '../components/ResizerEngine';
+import { CheckCircle2, ShieldCheck, Zap, Info, Check, X, Train, AlertCircle, ArrowRight } from 'lucide-react';
+
+const title = "Railway RRB Photo Resizer (30KB - 70KB) & Signature (15KB - 30KB)";
+const description = "Free online Railway RRB Photo & Signature Resizer for RRB ALP, Technician, NTPC, JE & Group D 2026. Locks photo to 30KB-70KB (35x45mm) and signature to 15KB-30KB.";
+const canonicalUrl = "https://sarkariphotoresizer.com/railway-photo-resizer";
+
+const rrbFaqs = [
+  {
+    q: "Why is the Railway RRB photo size range (30KB - 70KB) different from SSC?",
+    a: "Railway Recruitment Boards (RRB) mandate a minimum file size of 30.0 KB and a maximum of 70.0 KB to ensure higher image resolution for biometric verification during computer-based tests (CBT). If your photo is below 30 KB, the RRB portal will reject it with an 'Invalid File Size' error."
+  },
+  {
+    q: "What is the exact signature size required for RRB ALP, NTPC, and Group D?",
+    a: "RRB notifications require candidate signatures to measure 35 mm × 15 mm (approximately 350 × 150 pixels) with a file size strictly between 15.0 KB and 30.0 KB in JPG/JPEG format. Signatures under 15.0 KB are systematically rejected."
+  },
+  {
+    q: "Can I use a photograph with a blue or colored background for RRB?",
+    a: "No. Railway Recruitment Boards strictly instruct candidates that the photograph must have a clear, plain white background. Colored, dark, or textured backgrounds lead to application disqualification."
+  },
+  {
+    q: "How recent must the Railway exam photograph be?",
+    a: "The photograph must be a recent passport-style color photograph taken within the last 6 months. It must clearly represent your current physical appearance, facial hair, and hairstyle for verification at examination centers."
+  },
+  {
+    q: "Does Railway RRB allow wearing spectacles in the application photo?",
+    a: "The official RRB notification recommends taking photographs without spectacles. If you must wear prescription glasses, ensure there is zero glare/reflection from camera flash and that your eyes are 100% visible."
+  }
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": rrbFaqs.map(faq => ({
+    "@type": "Question",
+    "name": faq.q,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": faq.a
+    }
+  }))
+};
+---
+
+<Layout title={title} description={description} canonicalUrl={canonicalUrl}>
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <!-- Breadcrumb -->
+  <div class="bg-slate-900 border-b border-slate-800 text-xs py-2 px-4">
+    <div class="max-w-6xl mx-auto flex items-center gap-2 text-slate-400">
+      <a href="/" class="hover:text-white transition-colors">Home</a>
+      <span>/</span>
+      <span class="text-blue-400 font-semibold">Railway RRB Photo Resizer</span>
+    </div>
+  </div>
+
+  <!-- Hero Header Section -->
+  <section class="relative bg-gradient-to-b from-blue-900 via-slate-900 to-slate-900 text-white pt-6 pb-14 sm:pt-10 sm:pb-20 px-4 overflow-hidden">
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-blue-500/10 blur-3xl pointer-events-none rounded-full"></div>
+
+    <div class="max-w-4xl mx-auto text-center relative z-10 space-y-3">
+      <div class="inline-flex items-center gap-2 bg-blue-500/20 border border-blue-400/30 text-blue-200 px-3 py-0.5 rounded-full text-xs font-black uppercase tracking-wider backdrop-blur-md">
+        <span>🚆 Railway RRB ALP • Technician • NTPC • JE • Group D</span>
+      </div>
+
+      <h1 class="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight">
+        Railway RRB <span class="bg-gradient-to-r from-blue-400 via-sky-300 to-indigo-300 bg-clip-text text-transparent">Photo &amp; Signature Resizer</span>
+      </h1>
+
+      <p class="text-xs sm:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed">
+        Precisely compress passport photos into RRB's strict <strong class="text-white">30 KB - 70 KB</strong> boundary and signatures to <strong class="text-white">15 KB - 30 KB</strong> with official 35×45 mm dimensions.
+      </p>
+
+      <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-4 pt-1 text-[11px] sm:text-xs text-slate-300 font-semibold">
+        <span class="inline-flex items-center gap-1 bg-slate-800/80 px-2.5 py-1 rounded-lg border border-slate-700/60">
+          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+          <span>Strict 30 KB Minimum Photo Lock</span>
+        </span>
+        <span class="inline-flex items-center gap-1 bg-slate-800/80 px-2.5 py-1 rounded-lg border border-slate-700/60">
+          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+          <span>Strict 15 KB Minimum Signature Lock</span>
+        </span>
+        <span class="inline-flex items-center gap-1 bg-slate-800/80 px-2.5 py-1 rounded-lg border border-slate-700/60">
+          <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
+          <span>100% Client-Side Private</span>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Resizer Tool Container -->
+  <section id="tool" class="max-w-6xl mx-auto px-4 -mt-8 sm:-mt-12 relative z-20 mb-12 sm:mb-16">
+    <ResizerEngine client:idle initialPresetId="railway" initialMode="photo" />
+  </section>
+
+  <!-- Content Guide Section -->
+  <div class="max-w-6xl mx-auto px-4 space-y-12 pb-16">
+    <!-- Notice Box: RRB Minimum File Size Trap -->
+    <div class="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-5 text-slate-800 flex items-start gap-3.5">
+      <div class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-800 flex items-center justify-center shrink-0 mt-0.5">
+        <AlertCircle className="w-5 h-5 text-amber-700" />
+      </div>
+      <div class="space-y-1 text-xs sm:text-sm">
+        <h2 class="font-bold text-amber-950 text-sm sm:text-base">Beware the RRB Minimum File Size Requirement!</h2>
+        <p class="text-amber-900 leading-relaxed">
+          Unlike SSC which allows photos down to 20 KB and signatures down to 10 KB, <strong>Railway RRB strictly rejects photos below 30.0 KB and signatures below 15.0 KB</strong>! Generic photo compressors frequently compress files too small (e.g. 18 KB), causing immediate portal upload failure. Our tool features intelligent padding that guarantees your files never fall below RRB's minimum floor.
+        </p>
+      </div>
+    </div>
+
+    <!-- Official RRB Specification Summary Cards -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- RRB Photo -->
+      <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-4">
+        <div class="flex items-center justify-between">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-700 font-bold text-xs uppercase tracking-wider">
+            🚂 RRB Passport Photo Rules
+          </span>
+          <span class="text-xs font-black text-slate-400">35 × 45 mm</span>
+        </div>
+
+        <h3 class="text-xl font-black text-slate-900">Photograph Specification</h3>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-xs text-left border-collapse">
+            <tbody>
+              <tr class="border-b border-slate-100">
+                <td class="py-2.5 font-bold text-slate-600">File Size Range</td>
+                <td class="py-2.5 font-black text-blue-600">30.0 KB to 70.0 KB (Strict)</td>
+              </tr>
+              <tr class="border-b border-slate-100">
+                <td class="py-2.5 font-bold text-slate-600">Dimensions (Millimeters)</td>
+                <td class="py-2.5 font-bold text-slate-900">35 mm (W) × 45 mm (H)</td>
+              </tr>
+              <tr class="border-b border-slate-100">
+                <td class="py-2.5 font-bold text-slate-600">Dimensions (Pixels)</td>
+                <td class="py-2.5 font-bold text-slate-900">350 px (W) × 450 px (H)</td>
+              </tr>
+              <tr class="border-b border-slate-100">
+                <td class="py-2.5 font-bold text-slate-600">File Type</td>
+                <td class="py-2.5 font-bold text-slate-900">JPEG / JPG only</td>
+              </tr>
+              <tr class="border-b border-slate-100">
+                <td class="py-2.5 font-bold text-slate-600">Background</td>
+                <td class="py-2.5 font-bold text-slate-900">Clear, plain white background</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 font-bold text-slate-600">Recency</td>
+                <td class="py-2.5 font-bold text-slate-900">Taken within the last 6 months</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- RRB Signature -->
+      <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-4">
+        <div class="flex items-center justify-between">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 font-bold text-xs uppercase tracking-wider">
+            ✍️ RRB Signature Rules
+          </span>
+          <span class="text-xs font-black text-slate-400">35 × 15 mm</span>
+        </div>
+
+        <h3 class="text-xl font-black text-slate-900">Signature Specification</h3>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-xs text-left border-collapse">
+            <tbody>
+              <tr class="border-b border-slate-100">
+                <td class="py-2.5 font-bold text-slate-600">File Size Range</td>
+                <td class="py-2.5 font-black text-emerald-600">15.0 KB to 30.0 KB (Strict)</td>
+              </tr>
+              <tr class="border-b border-slate-100">
+                <td class="py-2.5 font-bold text-slate-600">Dimensions (Millimeters)</td>
+                <td class="py-2.5 font-bold text-slate-900">35 mm (W) × 15 mm (H)</td>
+              </tr>
+              <tr class="border-b border-slate-100">
+                <td class="py-2.5 font-bold text-slate-600">Dimensions (Pixels)</td>
+                <td class="py-2.5 font-bold text-slate-900">350 px (W) × 150 px (H)</td>
+              </tr>
+              <tr class="border-b border-slate-100">
+                <td class="py-2.5 font-bold text-slate-600">Ink &amp; Paper</td>
+                <td class="py-2.5 font-bold text-slate-900">Black or dark blue ink on white paper</td>
+              </tr>
+              <tr class="border-b border-slate-100">
+                <td class="py-2.5 font-bold text-slate-600">Handwriting Style</td>
+                <td class="py-2.5 font-bold text-slate-900">Running handwriting only (No BLOCK letters)</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 font-bold text-slate-600">File Type</td>
+                <td class="py-2.5 font-bold text-slate-900">JPEG / JPG only</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Do's and Don'ts for Railway Recruitment -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-6">
+      <div class="max-w-2xl">
+        <span class="text-xs font-black text-blue-600 uppercase tracking-wider">Scrutiny Guidelines</span>
+        <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1">
+          RRB CEN Application Compliance Checklist
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-600 mt-2">
+          Make sure your uploaded files conform to these checks before final submission on the Railway recruitment portal:
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Do's -->
+        <div class="p-5 rounded-2xl bg-emerald-50/60 border border-emerald-200/80 space-y-3">
+          <div class="flex items-center gap-2 text-emerald-800 font-black text-sm">
+            <Check className="w-5 h-5 text-emerald-600" />
+            <span>Passed RRB Verification Criteria</span>
+          </div>
+          <ul class="space-y-2 text-xs text-slate-700">
+            <li class="flex items-start gap-2">
+              <span class="text-emerald-600 font-bold">✓</span>
+              <span><strong>Keep 12 identical physical copies:</strong> RRB requires candidates to retain at least 12 identical copies of the uploaded photo for subsequent stages (CBT 2, CBAT, DV, and Medical).</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-emerald-600 font-bold">✓</span>
+              <span><strong>Face coverage between 70% and 80%:</strong> Both ears and neck must be visible with natural frontal lighting.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-emerald-600 font-bold">✓</span>
+              <span><strong>Photo strictly 30.0 KB to 70.0 KB:</strong> Guaranteed acceptance without file size error.</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Don'ts -->
+        <div class="p-5 rounded-2xl bg-rose-50/60 border border-rose-200/80 space-y-3">
+          <div class="flex items-center gap-2 text-rose-800 font-black text-sm">
+            <X className="w-5 h-5 text-rose-600" />
+            <span>Frequent Disqualification Traps</span>
+          </div>
+          <ul class="space-y-2 text-xs text-slate-700">
+            <li class="flex items-start gap-2">
+              <span class="text-rose-600 font-bold">✗</span>
+              <span><strong>Files under 30 KB or signatures under 15 KB:</strong> Rejected immediately by the RRB upload API.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-rose-600 font-bold">✗</span>
+              <span><strong>Wearing dark goggles, sunglasses or heavy caps:</strong> Causes instant disqualification during image scrutiny.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-rose-600 font-bold">✗</span>
+              <span><strong>Signature in ALL CAPITAL LETTERS:</strong> Treated as invalid and not matching candidate signature.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQs -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-6">
+      <div>
+        <span class="text-xs font-black text-blue-600 uppercase tracking-wider">Railway Recruitment Help</span>
+        <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1">
+          Railway RRB Photo Resizing FAQs
+        </h2>
+      </div>
+
+      <div class="space-y-4">
+        {rrbFaqs.map((faq) => (
+          <details class="group border border-slate-200 rounded-2xl p-4 [&_summary::-webkit-details-marker]:hidden bg-slate-50/50">
+            <summary class="flex items-center justify-between cursor-pointer font-bold text-slate-900 text-sm sm:text-base">
+              <span>{faq.q}</span>
+              <span class="text-blue-600 group-open:rotate-180 transition-transform text-lg ml-2">▾</span>
+            </summary>
+            <p class="mt-3 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-200/60 pt-3">
+              {faq.a}
+            </p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <!-- Navigation Hub -->
+    <section class="bg-gradient-to-r from-blue-900 to-indigo-900 text-white rounded-3xl p-6 sm:p-8 space-y-4">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+          <h3 class="text-lg font-black">Applying for SSC or UPSC as well?</h3>
+          <p class="text-xs text-slate-300 mt-1">Use our dedicated presets designed specifically for those portals:</p>
+        </div>
+        <div class="flex flex-wrap gap-2 text-xs">
+          <a href="/ssc-photo-resizer" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 font-bold transition-colors">
+            SSC Photo Resizer (20-50 KB) →
+          </a>
+          <a href="/upsc-photo-resizer" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 font-bold transition-colors">
+            UPSC Resizer (Name &amp; Date) →
+          </a>
+          <a href="/signature-resizer" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 font-bold transition-colors">
+            Signature Resizer (10-20 KB) →
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+</Layout>

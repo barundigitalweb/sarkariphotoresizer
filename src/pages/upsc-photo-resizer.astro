@@ -1,0 +1,284 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ResizerEngine from '../components/ResizerEngine';
+import { CheckCircle2, ShieldCheck, Zap, Info, Check, X, Calendar, User, FileCheck, ArrowRight } from 'lucide-react';
+
+const title = "UPSC Photo Resizer with Name & Date (DOP) | 20KB to 300KB Online";
+const description = "Free UPSC Photo Resizer for Civil Services IAS, IFS, NDA, CDS, CAPF & OTR 2026. Automatically prints candidate Name & Date of Photo (DOP) on bottom strip and locks 20KB-300KB.";
+const canonicalUrl = "https://sarkariphotoresizer.com/upsc-photo-resizer";
+
+const upscFaqs = [
+  {
+    q: "Is candidate Name and Date of Photo (DOP) mandatory for UPSC in 2026?",
+    a: "Yes. UPSC's official notification strictly mandates that the candidate's photograph must not be more than 10 days old from the start of the online application process. The candidate's name and the date of taking the photograph must be clearly imprinted on the bottom of the photo."
+  },
+  {
+    q: "What are the pixel dimensions for UPSC OTR photo and signature?",
+    a: "UPSC requires photos and signatures to have equal height and width or aspect ratio within minimum 350 × 350 pixels up to maximum 1000 × 1000 pixels. Our resizer presets standard 500 × 500 px for photo and 500 × 250 px for signature to ensure optimal clarity."
+  },
+  {
+    q: "What is the allowed file size range for UPSC applications?",
+    a: "Both the photograph and signature for UPSC examinations (CSE, NDA, CDS, CAPF) must strictly weigh between 20.0 KB (minimum) and 300.0 KB (maximum) in JPG/JPEG format."
+  },
+  {
+    q: "What percentage of the photo should the candidate's face occupy for UPSC?",
+    a: "As per UPSC notification guidelines, the candidate's face should occupy at least 3/4th (approx. 70% to 75%) of the total photograph area with a clear frontal view and neutral expression."
+  },
+  {
+    q: "Can I use the same photo for UPSC Preliminary, Mains, and Interview?",
+    a: "Yes. UPSC requires candidates' appearance in the examination and interview to match the photograph uploaded during application/OTR. If you have a beard or spectacles in your application photo, you must maintain the same look during the examination and personality test."
+  }
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": upscFaqs.map(faq => ({
+    "@type": "Question",
+    "name": faq.q,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": faq.a
+    }
+  }))
+};
+---
+
+<Layout title={title} description={description} canonicalUrl={canonicalUrl}>
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <!-- Breadcrumb -->
+  <div class="bg-slate-900 border-b border-slate-800 text-xs py-2 px-4">
+    <div class="max-w-6xl mx-auto flex items-center gap-2 text-slate-400">
+      <a href="/" class="hover:text-white transition-colors">Home</a>
+      <span>/</span>
+      <span class="text-blue-400 font-semibold">UPSC Photo Resizer (Name &amp; Date)</span>
+    </div>
+  </div>
+
+  <!-- Hero Header Section -->
+  <section class="relative bg-gradient-to-b from-blue-900 via-slate-900 to-slate-900 text-white pt-6 pb-14 sm:pt-10 sm:pb-20 px-4 overflow-hidden">
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-blue-500/10 blur-3xl pointer-events-none rounded-full"></div>
+
+    <div class="max-w-4xl mx-auto text-center relative z-10 space-y-3">
+      <div class="inline-flex items-center gap-2 bg-blue-500/20 border border-blue-400/30 text-blue-200 px-3 py-0.5 rounded-full text-xs font-black uppercase tracking-wider backdrop-blur-md">
+        <span>🏛️ UPSC Civil Services IAS • IFS • NDA • CDS • OTR 2026</span>
+      </div>
+
+      <h1 class="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight">
+        UPSC Photo Resizer with <span class="bg-gradient-to-r from-blue-400 via-sky-300 to-indigo-300 bg-clip-text text-transparent">Name &amp; Date (DOP)</span>
+      </h1>
+
+      <p class="text-xs sm:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed">
+        Free online resizer engineered for UPSC One Time Registration (OTR). Automatically stamps candidate <strong class="text-white">Name and Date of Photo</strong> on the bottom strip and locks file size between <strong class="text-white">20 KB &amp; 300 KB</strong>.
+      </p>
+
+      <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-4 pt-1 text-[11px] sm:text-xs text-slate-300 font-semibold">
+        <span class="inline-flex items-center gap-1 bg-slate-800/80 px-2.5 py-1 rounded-lg border border-slate-700/60">
+          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+          <span>Auto Name &amp; Date Strip</span>
+        </span>
+        <span class="inline-flex items-center gap-1 bg-slate-800/80 px-2.5 py-1 rounded-lg border border-slate-700/60">
+          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+          <span>20 KB - 300 KB Official Boundary</span>
+        </span>
+        <span class="inline-flex items-center gap-1 bg-slate-800/80 px-2.5 py-1 rounded-lg border border-slate-700/60">
+          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+          <span>Square 350×350 to 1000×1000 Px</span>
+        </span>
+        <span class="inline-flex items-center gap-1 bg-slate-800/80 px-2.5 py-1 rounded-lg border border-slate-700/60">
+          <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
+          <span>100% Client-Side Private</span>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Resizer Tool Container -->
+  <section id="tool" class="max-w-6xl mx-auto px-4 -mt-8 sm:-mt-12 relative z-20 mb-12 sm:mb-16">
+    <ResizerEngine client:idle initialPresetId="upsc" initialMode="photo" initialAddDop={true} />
+  </section>
+
+  <!-- UPSC Guidelines Detailed Section -->
+  <div class="max-w-6xl mx-auto px-4 space-y-12 pb-16">
+    <!-- Notice Box: UPSC 10-Day Rule -->
+    <div class="bg-blue-500/10 border border-blue-500/30 rounded-2xl p-5 text-slate-800 flex items-start gap-3.5">
+      <div class="w-8 h-8 rounded-lg bg-blue-600/20 text-blue-800 flex items-center justify-center shrink-0 mt-0.5">
+        <Info className="w-5 h-5 text-blue-700" />
+      </div>
+      <div class="space-y-1 text-xs sm:text-sm">
+        <h2 class="font-bold text-blue-950 text-sm sm:text-base">Mandatory UPSC Guideline: 10-Day Photograph Rule</h2>
+        <p class="text-blue-900 leading-relaxed">
+          The Union Public Service Commission explicitly mandates that the photograph must not be older than <strong>10 days</strong> from the opening of the application window. The candidate’s <strong>Full Name</strong> and <strong>Date of Taking the Photograph (DD-MM-YYYY)</strong> must be legibly printed across the bottom portion of the image. Our tool generates this banner automatically.
+        </p>
+      </div>
+    </div>
+
+    <!-- Official UPSC Specifications Breakdown -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- UPSC Photo -->
+      <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-4">
+        <div class="flex items-center justify-between">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-700 font-bold text-xs uppercase tracking-wider">
+            📸 UPSC Photo Specification
+          </span>
+          <span class="text-xs font-black text-slate-400">350×350 to 1000×1000 px</span>
+        </div>
+
+        <h3 class="text-xl font-black text-slate-900">Photograph Criteria</h3>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-xs text-left border-collapse">
+            <tbody>
+              <tr class="border-b border-slate-100">
+                <td class="py-2.5 font-bold text-slate-600">File Size Boundary</td>
+                <td class="py-2.5 font-black text-blue-600">20.0 KB to 300.0 KB</td>
+              </tr>
+              <tr class="border-b border-slate-100">
+                <td class="py-2.5 font-bold text-slate-600">Pixel Dimensions</td>
+                <td class="py-2.5 font-bold text-slate-900">Min 350 × 350 px, Max 1000 × 1000 px</td>
+              </tr>
+              <tr class="border-b border-slate-100">
+                <td class="py-2.5 font-bold text-slate-600">Name &amp; Date Overlay</td>
+                <td class="py-2.5 font-black text-emerald-600">Mandatory (Bottom 15% Strip)</td>
+              </tr>
+              <tr class="border-b border-slate-100">
+                <td class="py-2.5 font-bold text-slate-600">Face Coverage</td>
+                <td class="py-2.5 font-bold text-slate-900">At least 75% of space</td>
+              </tr>
+              <tr class="border-b border-slate-100">
+                <td class="py-2.5 font-bold text-slate-600">Background</td>
+                <td class="py-2.5 font-bold text-slate-900">Plain white or very light grey</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 font-bold text-slate-600">Format</td>
+                <td class="py-2.5 font-bold text-slate-900">JPG / JPEG</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- UPSC Signature -->
+      <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-4">
+        <div class="flex items-center justify-between">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 font-bold text-xs uppercase tracking-wider">
+            ✍️ UPSC Signature Specification
+          </span>
+          <span class="text-xs font-black text-slate-400">Min 350×350 px</span>
+        </div>
+
+        <h3 class="text-xl font-black text-slate-900">Signature Criteria</h3>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-xs text-left border-collapse">
+            <tbody>
+              <tr class="border-b border-slate-100">
+                <td class="py-2.5 font-bold text-slate-600">File Size Boundary</td>
+                <td class="py-2.5 font-black text-emerald-600">20.0 KB to 300.0 KB</td>
+              </tr>
+              <tr class="border-b border-slate-100">
+                <td class="py-2.5 font-bold text-slate-600">Pixel Dimensions</td>
+                <td class="py-2.5 font-bold text-slate-900">Min 350 × 350 px, Max 1000 × 1000 px</td>
+              </tr>
+              <tr class="border-b border-slate-100">
+                <td class="py-2.5 font-bold text-slate-600">Pen Type</td>
+                <td class="py-2.5 font-bold text-slate-900">Dark black ballpoint pen</td>
+              </tr>
+              <tr class="border-b border-slate-100">
+                <td class="py-2.5 font-bold text-slate-600">Paper Standard</td>
+                <td class="py-2.5 font-bold text-slate-900">Clean white unruled paper</td>
+              </tr>
+              <tr class="border-b border-slate-100">
+                <td class="py-2.5 font-bold text-slate-600">Capital Letters</td>
+                <td class="py-2.5 font-bold text-slate-900">Strictly prohibited (Use cursive)</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 font-bold text-slate-600">Format</td>
+                <td class="py-2.5 font-bold text-slate-900">JPG / JPEG</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- How our Name & Date feature works -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-6">
+      <div class="max-w-2xl">
+        <span class="text-xs font-black text-blue-600 uppercase tracking-wider">Automated Name &amp; Date Technology</span>
+        <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1">
+          How to Add Candidate Name and Date of Photo in 3 Seconds
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-600 mt-2">
+          You do not need complicated software like Photoshop or MS Paint. Our engine computes the exact banner ratio and typography automatically:
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-2.5">
+          <div class="w-8 h-8 rounded-lg bg-blue-600 text-white font-black text-sm flex items-center justify-center">1</div>
+          <h3 class="font-bold text-slate-900 text-sm">Upload Any Passport Photo</h3>
+          <p class="text-xs text-slate-600">Upload a recent frontal portrait photo taken against a plain white background using your phone camera.</p>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-2.5">
+          <div class="w-8 h-8 rounded-lg bg-indigo-600 text-white font-black text-sm flex items-center justify-center">2</div>
+          <h3 class="font-bold text-slate-900 text-sm">Enter Name &amp; Today's Date</h3>
+          <p class="text-xs text-slate-600">Type your official name as shown in your Matriculation (Class 10) certificate. The current date is pre-filled.</p>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-2.5">
+          <div class="w-8 h-8 rounded-lg bg-emerald-600 text-white font-black text-sm flex items-center justify-center">3</div>
+          <h3 class="font-bold text-slate-900 text-sm">Download Verified UPSC JPG</h3>
+          <p class="text-xs text-slate-600">The tool overlays a clean white bottom strip with sharp black text and compresses to 20KB-300KB immediately.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- UPSC FAQs -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-6">
+      <div>
+        <span class="text-xs font-black text-blue-600 uppercase tracking-wider">UPSC Questions &amp; Answers</span>
+        <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1">
+          UPSC Photo &amp; Signature Resizing FAQs
+        </h2>
+      </div>
+
+      <div class="space-y-4">
+        {upscFaqs.map((faq) => (
+          <details class="group border border-slate-200 rounded-2xl p-4 [&_summary::-webkit-details-marker]:hidden bg-slate-50/50">
+            <summary class="flex items-center justify-between cursor-pointer font-bold text-slate-900 text-sm sm:text-base">
+              <span>{faq.q}</span>
+              <span class="text-blue-600 group-open:rotate-180 transition-transform text-lg ml-2">▾</span>
+            </summary>
+            <p class="mt-3 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-200/60 pt-3">
+              {faq.a}
+            </p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <!-- Navigation Hub -->
+    <section class="bg-gradient-to-r from-blue-900 to-indigo-900 text-white rounded-3xl p-6 sm:p-8 space-y-4">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+          <h3 class="text-lg font-black">Also Preparing for SSC or Railway RRB?</h3>
+          <p class="text-xs text-slate-300 mt-1">Easily switch to other standardized recruitment exam dimensions:</p>
+        </div>
+        <div class="flex flex-wrap gap-2 text-xs">
+          <a href="/ssc-photo-resizer" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 font-bold transition-colors">
+            SSC Photo Resizer (20-50 KB) →
+          </a>
+          <a href="/railway-photo-resizer" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 font-bold transition-colors">
+            Railway RRB Resizer →
+          </a>
+          <a href="/signature-resizer" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 font-bold transition-colors">
+            Signature Resizer (10-20 KB) →
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+</Layout>
