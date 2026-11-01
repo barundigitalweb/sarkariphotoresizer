@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { EXAM_PRESETS, type ExamPreset } from '../lib/presets';
-import { processImage, type ProcessImageResult } from '../lib/image-processor';
+import { processImage, type ProcessImageResult, type ResizerMode } from '../lib/image-processor';
 import CropModal from './CropModal';
 import {
   Upload,
@@ -22,21 +22,99 @@ import {
   Share2,
   ArrowRight,
   Star,
-  Crop
+  Crop,
+  FileText,
+  Fingerprint,
+  Globe,
+  ExternalLink
 } from 'lucide-react';
 
 export interface ResizerEngineProps {
-  initialMode?: 'photo' | 'signature';
+  initialMode?: ResizerMode;
   initialPresetId?: string;
   initialAddDop?: boolean;
 }
+
+const translations = {
+  en: {
+    photoTab: 'Passport Photo',
+    sigTab: 'Signature',
+    docTab: 'Certificate (PDF)',
+    thumbTab: 'Thumb (LTI)',
+    targetExam: 'Target Exam',
+    specHeader: 'Exam Specs & Custom Size',
+    minKb: 'Min KB',
+    maxKb: 'Max KB',
+    widthPx: 'Width (px)',
+    heightPx: 'Height (px)',
+    addDop: 'Add Name & Date of Photo (DOP)',
+    candidateName: 'Candidate Full Name',
+    photoDate: 'Date of Photograph (DD-MM-YYYY)',
+    cleanBg: 'Auto-Clean Background & Shadows',
+    cleanBgDesc: 'Removes paper shadows and yellow tints to output crisp dark marks on white.',
+    docInfo: 'Converts certificate image into standard single-page PDF (100 - 300 KB).',
+    uploadHeading: (m: string) => `Upload ${m}`,
+    uploadSub: 'Drag & drop image here, browse from device, or paste with Ctrl + V',
+    chooseBtn: 'Choose File from Device',
+    cropTool: 'Crop Tool',
+    cropped: '✓ Cropped',
+    reset: 'Reset',
+    rotate: 'Rotate 90°',
+    faceGuide: 'Face Guide',
+    zoom: 'Zoom:',
+    compressing: 'Compressing to exact KB...',
+    compliantMsg: '100% compliant & ready to upload to official exam portals.',
+    downloadBtn: (label: string, isPdf: boolean) => `Download Ready ${label} (${isPdf ? 'PDF' : 'JPG'})`,
+    copyBtn: 'Copy to Clipboard',
+    nextStepsHeading: 'Next Step: Upload directly to official recruitment portal:',
+    ratingPrompt: 'How was your resizing experience?',
+    ratingThankYou: 'Thank you for your rating! ⭐'
+  },
+  hi: {
+    photoTab: 'पासपोर्ट फोटो',
+    sigTab: 'हस्ताक्षर (Sign)',
+    docTab: 'दस्तावेज़ (PDF)',
+    thumbTab: 'अंगूठे का निशान (LTI)',
+    targetExam: 'परीक्षा चुनें',
+    specHeader: 'परीक्षा साइज़ और कस्टम सेटिंग',
+    minKb: 'न्यूनतम KB',
+    maxKb: 'अधिकतम KB',
+    widthPx: 'चौड़ाई (px)',
+    heightPx: 'ऊंचाई (px)',
+    addDop: 'नाम और फोटो की तारीख (DOP) जोड़ें',
+    candidateName: 'उम्मीदवार का पूरा नाम',
+    photoDate: 'फोटो खींचने की तारीख (DD-MM-YYYY)',
+    cleanBg: 'बैकग्राउंड और छाया साफ करें',
+    cleanBgDesc: 'मोबाइल कैमरे की छाया व पीलापन हटाकर सफेद कागज पर गहरा स्याही आउटपुट देता है।',
+    docInfo: 'प्रमाणपत्र या मार्कशीट को मानक एकल-पृष्ठ PDF (100 - 300 KB) में बदलता है।',
+    uploadHeading: (m: string) => `${m} अपलोड करें`,
+    uploadSub: 'यहाँ फ़ाइल खींचकर डालें, डिवाइस से चुनें, या Ctrl + V से पेस्ट करें',
+    chooseBtn: 'डिवाइस से फ़ाइल चुनें',
+    cropTool: 'क्रॉप टूल (Crop)',
+    cropped: '✓ क्रॉप्ड',
+    reset: 'रीसेट',
+    rotate: '90° घुमाएं',
+    faceGuide: 'चेहरा गाइड',
+    zoom: 'ज़ूम:',
+    compressing: 'सटीक KB में कंप्रेस हो रहा है...',
+    compliantMsg: '100% सरकारी भर्ती पोर्टल के नियमों के अनुसार तैयार।',
+    downloadBtn: (label: string, isPdf: boolean) => `तैयार ${label} डाउनलोड करें (${isPdf ? 'PDF' : 'JPG'})`,
+    copyBtn: 'क्लिपबोर्ड में कॉपी करें',
+    nextStepsHeading: 'अगला कदम: आधिकारिक भर्ती पोर्टल पर अपलोड करें:',
+    ratingPrompt: 'आपका अनुभव कैसा रहा?',
+    ratingThankYou: 'रेटिंग के लिए धन्यवाद! ⭐'
+  }
+};
 
 export default function ResizerEngine({
   initialMode = 'photo',
   initialPresetId = 'ssc',
   initialAddDop
 }: ResizerEngineProps = {}) {
-  const [mode, setMode] = useState<'photo' | 'signature'>(initialMode);
+  const [lang, setLang] = useState<'en' | 'hi'>('en');
+  const t = translations[lang];
+
+  const [mode, setMode] = useState<ResizerMode>(initialMode);
   const [selectedPresetId, setSelectedPresetId] = useState<string>(initialPresetId);
   const [file, setFile] = useState<File | null>(null);
   const [originalFile, setOriginalFile] = useState<File | null>(null);
@@ -52,14 +130,21 @@ export default function ResizerEngine({
 
   // Preset settings
   const currentPreset = EXAM_PRESETS.find((p) => p.id === selectedPresetId) || EXAM_PRESETS[0];
-  const initialPresetConfig = EXAM_PRESETS.find((p) => p.id === initialPresetId) || EXAM_PRESETS[0];
-  const startConfig = initialMode === 'photo' ? initialPresetConfig.photo : initialPresetConfig.signature;
+
+  const getInitialConfig = () => {
+    const preset = EXAM_PRESETS.find((p) => p.id === initialPresetId) || EXAM_PRESETS[0];
+    if (initialMode === 'signature') return { w: preset.signature.widthPx, h: preset.signature.heightPx, min: preset.signature.minKb, max: preset.signature.maxKb };
+    if (initialMode === 'document') return { w: 1200, h: 1600, min: 100, max: 300 };
+    if (initialMode === 'thumb') return { w: 240, h: 240, min: 10, max: 50 };
+    return { w: preset.photo.widthPx, h: preset.photo.heightPx, min: preset.photo.minKb, max: preset.photo.maxKb };
+  };
+  const init = getInitialConfig();
 
   // Custom adjustable parameters
-  const [targetWidth, setTargetWidth] = useState<number>(startConfig.widthPx);
-  const [targetHeight, setTargetHeight] = useState<number>(startConfig.heightPx);
-  const [minKb, setMinKb] = useState<number>(startConfig.minKb);
-  const [maxKb, setMaxKb] = useState<number>(startConfig.maxKb);
+  const [targetWidth, setTargetWidth] = useState<number>(init.w);
+  const [targetHeight, setTargetHeight] = useState<number>(init.h);
+  const [minKb, setMinKb] = useState<number>(init.min);
+  const [maxKb, setMaxKb] = useState<number>(init.max);
 
   // Rotation & Zoom
   const [rotation, setRotation] = useState<number>(0);
@@ -69,7 +154,7 @@ export default function ResizerEngine({
   const [addDop, setAddDop] = useState<boolean>(
     initialAddDop !== undefined
       ? initialAddDop
-      : Boolean(initialMode === 'photo' && initialPresetConfig.photo.requiresDop)
+      : Boolean(initialMode === 'photo' && currentPreset.photo.requiresDop)
   );
   const [candidateName, setCandidateName] = useState<string>('');
   const [photoDate, setPhotoDate] = useState<string>(() => {
@@ -80,7 +165,7 @@ export default function ResizerEngine({
     return `${dd}-${mm}-${yyyy}`;
   });
 
-  // Signature enhancement
+  // Signature / thumb enhancement
   const [cleanSignature, setCleanSignature] = useState<boolean>(true);
 
   // User Interactive Rating State
@@ -113,15 +198,38 @@ export default function ResizerEngine({
 
   // Update dimensions and KB targets when preset or mode changes
   useEffect(() => {
-    const config = mode === 'photo' ? currentPreset.photo : currentPreset.signature;
-    setTargetWidth(config.widthPx);
-    setTargetHeight(config.heightPx);
-    setMinKb(config.minKb);
-    setMaxKb(config.maxKb);
-    if (initialAddDop !== undefined && selectedPresetId === initialPresetId && mode === initialMode) {
-      setAddDop(initialAddDop);
-    } else {
-      setAddDop(Boolean(mode === 'photo' && currentPreset.photo.requiresDop));
+    if (mode === 'photo') {
+      const config = currentPreset.photo;
+      setTargetWidth(config.widthPx);
+      setTargetHeight(config.heightPx);
+      setMinKb(config.minKb);
+      setMaxKb(config.maxKb);
+      if (initialAddDop !== undefined && selectedPresetId === initialPresetId && mode === initialMode) {
+        setAddDop(initialAddDop);
+      } else {
+        setAddDop(Boolean(currentPreset.photo.requiresDop));
+      }
+    } else if (mode === 'signature') {
+      const config = currentPreset.signature;
+      setTargetWidth(config.widthPx);
+      setTargetHeight(config.heightPx);
+      setMinKb(config.minKb);
+      setMaxKb(config.maxKb);
+      setAddDop(false);
+    } else if (mode === 'document') {
+      // Standard A4 document/certificate proportion (1200x1600 px), 100 KB to 300 KB PDF
+      setTargetWidth(1200);
+      setTargetHeight(1600);
+      setMinKb(100);
+      setMaxKb(300);
+      setAddDop(false);
+    } else if (mode === 'thumb') {
+      // Left Thumb Impression (240x240 px), 10 KB to 50 KB JPG
+      setTargetWidth(240);
+      setTargetHeight(240);
+      setMinKb(10);
+      setMaxKb(50);
+      setAddDop(false);
     }
   }, [selectedPresetId, mode]);
 
@@ -280,8 +388,15 @@ export default function ResizerEngine({
     const a = document.createElement('a');
     a.href = result.dataUrl;
     const cleanExam = selectedPresetId.toUpperCase();
-    const prefix = mode === 'photo' ? 'Sarkari_Photo' : 'Sarkari_Signature';
-    a.download = `${prefix}_${cleanExam}_${result.width}x${result.height}_${result.sizeKb}KB.jpg`;
+    const isPdf = result.format === 'application/pdf';
+    const ext = isPdf ? 'pdf' : 'jpg';
+
+    let prefix = 'Sarkari_Photo';
+    if (mode === 'signature') prefix = 'Sarkari_Signature';
+    else if (mode === 'document') prefix = 'Sarkari_Certificate';
+    else if (mode === 'thumb') prefix = 'Sarkari_Thumb_LTI';
+
+    a.download = `${prefix}_${cleanExam}_${result.sizeKb}KB.${ext}`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -344,41 +459,100 @@ export default function ResizerEngine({
 
   return (
     <div className="w-full max-w-5xl mx-auto space-y-6">
-      {/* 1. Mode Switcher Bar */}
-      <div className="bg-slate-900/95 backdrop-blur-md p-1.5 rounded-2xl flex items-center justify-between shadow-xl border border-slate-800">
-        <button
-          type="button"
-          onClick={() => setMode('photo')}
-          aria-label="Switch to Passport Photo Resizer mode (20 KB to 50 KB)"
-          className={`flex-1 flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl font-bold text-sm sm:text-base transition-all duration-200 cursor-pointer ${
-            mode === 'photo'
-              ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/25'
-              : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
-          }`}
-        >
-          <ImageIcon className="w-5 h-5 text-blue-200" />
-          <span>Passport Photo Resizer</span>
-          <span className="hidden sm:inline-block text-[11px] font-bold bg-blue-900/60 border border-blue-400/40 text-blue-100 px-2 py-0.5 rounded-full">
-            20 - 50 KB
-          </span>
-        </button>
+      {/* 1. Mode Switcher Bar + Language Toggle */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-2.5 bg-slate-900/95 backdrop-blur-md p-2 rounded-2xl shadow-xl border border-slate-800">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 w-full sm:flex-1">
+          <button
+            type="button"
+            onClick={() => setMode('photo')}
+            aria-label="Switch to Passport Photo Resizer mode"
+            className={`flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 cursor-pointer ${
+              mode === 'photo'
+                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-500/25'
+                : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+            }`}
+          >
+            <ImageIcon className="w-4 h-4 text-blue-200 shrink-0" />
+            <span className="truncate">{t.photoTab}</span>
+            <span className="hidden xl:inline-block text-[10px] font-bold bg-blue-900/60 border border-blue-400/40 text-blue-100 px-1.5 py-0.2 rounded-full">
+              20-50K
+            </span>
+          </button>
 
-        <button
-          type="button"
-          onClick={() => setMode('signature')}
-          aria-label="Switch to Signature Resizer mode (10 KB to 20 KB)"
-          className={`flex-1 flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl font-bold text-sm sm:text-base transition-all duration-200 cursor-pointer ${
-            mode === 'signature'
-              ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-500/25'
-              : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
-          }`}
-        >
-          <PenTool className="w-5 h-5 text-emerald-200" />
-          <span>Signature Resizer</span>
-          <span className="hidden sm:inline-block text-[11px] font-bold bg-emerald-900/60 border border-emerald-400/40 text-emerald-100 px-2 py-0.5 rounded-full">
-            10 - 20 KB
-          </span>
-        </button>
+          <button
+            type="button"
+            onClick={() => setMode('signature')}
+            aria-label="Switch to Signature Resizer mode"
+            className={`flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 cursor-pointer ${
+              mode === 'signature'
+                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-500/25'
+                : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+            }`}
+          >
+            <PenTool className="w-4 h-4 text-blue-200 shrink-0" />
+            <span className="truncate">{t.sigTab}</span>
+            <span className="hidden xl:inline-block text-[10px] font-bold bg-blue-900/60 border border-blue-400/40 text-blue-100 px-1.5 py-0.2 rounded-full">
+              10-20K
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setMode('document')}
+            aria-label="Switch to Certificate / Document PDF Resizer mode"
+            className={`flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 cursor-pointer ${
+              mode === 'document'
+                ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md shadow-emerald-500/25'
+                : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+            }`}
+          >
+            <FileText className="w-4 h-4 text-emerald-200 shrink-0" />
+            <span className="truncate">{t.docTab}</span>
+            <span className="hidden xl:inline-block text-[10px] font-bold bg-emerald-900/60 border border-emerald-400/40 text-emerald-100 px-1.5 py-0.2 rounded-full">
+              PDF
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setMode('thumb')}
+            aria-label="Switch to Left Thumb Impression LTI mode"
+            className={`flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 cursor-pointer ${
+              mode === 'thumb'
+                ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md shadow-purple-500/25'
+                : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+            }`}
+          >
+            <Fingerprint className="w-4 h-4 text-purple-200 shrink-0" />
+            <span className="truncate">{t.thumbTab}</span>
+            <span className="hidden xl:inline-block text-[10px] font-bold bg-purple-900/60 border border-purple-400/40 text-purple-100 px-1.5 py-0.2 rounded-full">
+              LTI
+            </span>
+          </button>
+        </div>
+
+        {/* Language Switcher Pill */}
+        <div className="flex items-center gap-1 bg-slate-800/90 p-1 rounded-xl border border-slate-700/80 shrink-0 self-end sm:self-center">
+          <Globe className="w-3.5 h-3.5 text-slate-400 ml-1.5" />
+          <button
+            type="button"
+            onClick={() => setLang('en')}
+            className={`px-2 py-1 rounded-lg text-[11px] font-black transition-colors ${
+              lang === 'en' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            EN
+          </button>
+          <button
+            type="button"
+            onClick={() => setLang('hi')}
+            className={`px-2 py-1 rounded-lg text-[11px] font-black transition-colors ${
+              lang === 'hi' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            हिन्दी
+          </button>
+        </div>
       </div>
 
       {/* 2. Main Processing Deck */}
@@ -552,8 +726,8 @@ export default function ResizerEngine({
               </div>
             )}
 
-            {/* Signature Mode Feature: Contrast Cleaner */}
-            {mode === 'signature' && (
+            {/* Signature & Thumb Mode Feature: Contrast Cleaner */}
+            {(mode === 'signature' || mode === 'thumb') && (
               <div className="pt-2 border-t border-slate-100">
                 <label htmlFor="clean-sig-checkbox" className="flex items-center gap-2 cursor-pointer">
                   <input
@@ -565,13 +739,26 @@ export default function ResizerEngine({
                   />
                   <div>
                     <span className="text-xs font-bold text-slate-800 block">
-                      Auto-Clean Signature Background
+                      {t.cleanBg}
                     </span>
                     <span className="text-[11px] text-slate-600 block">
-                      Filters shadows and yellow tints to output crisp dark ink on pure white.
+                      {t.cleanBgDesc}
                     </span>
                   </div>
                 </label>
+              </div>
+            )}
+
+            {/* Document PDF Mode Note */}
+            {mode === 'document' && (
+              <div className="pt-2 border-t border-slate-100 p-3 bg-emerald-50/70 rounded-xl border border-emerald-200 text-xs text-emerald-950 space-y-1">
+                <span className="font-bold flex items-center gap-1.5 text-emerald-800">
+                  <FileText className="w-3.5 h-3.5" />
+                  <span>PDF Document Standard</span>
+                </span>
+                <p className="text-[11px] text-emerald-800 leading-relaxed">
+                  {t.docInfo}
+                </p>
               </div>
             )}
           </div>
@@ -582,14 +769,12 @@ export default function ResizerEngine({
           {/* Mobile-Only Quick Exam Selector Bar */}
           <div className="lg:hidden flex items-center justify-between p-3 bg-white rounded-2xl border border-slate-200/80 shadow-2xs">
             <div className="pr-2">
-              <span className="text-[10px] uppercase font-bold text-slate-500 block">Target Exam</span>
+              <span className="text-[10px] uppercase font-bold text-slate-500 block">{t.targetExam}</span>
               <span className="text-xs font-black text-slate-900 block truncate max-w-[200px]">
                 {currentPreset.name.split('(')[0]}
               </span>
               <span className="text-[10px] text-blue-600 font-bold block">
-                {mode === 'photo'
-                  ? `${currentPreset.photo.minKb}-${currentPreset.photo.maxKb} KB`
-                  : `${currentPreset.signature.minKb}-${currentPreset.signature.maxKb} KB`}
+                {minKb} - {maxKb} KB {mode === 'document' ? 'PDF' : 'JPG'}
               </span>
             </div>
             <select
@@ -618,26 +803,40 @@ export default function ResizerEngine({
                 id="file-upload-input"
                 ref={fileInputRef}
                 type="file"
-                aria-label="Upload photo or signature file from device"
+                aria-label="Upload photo, signature, or document file from device"
                 accept="image/jpeg,image/png,image/webp,image/jpg"
                 onChange={handleFileChange}
                 className="hidden"
               />
               <div className="w-16 h-16 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mb-4 shadow-inner">
-                <Upload className="w-8 h-8" />
+                {mode === 'document' ? (
+                  <FileText className="w-8 h-8" />
+                ) : mode === 'thumb' ? (
+                  <Fingerprint className="w-8 h-8" />
+                ) : (
+                  <Upload className="w-8 h-8" />
+                )}
               </div>
               <h2 className="text-lg sm:text-xl font-black text-slate-900 mb-1">
-                Upload {mode === 'photo' ? 'Passport Photo' : 'Signature'}
+                {t.uploadHeading(
+                  mode === 'photo'
+                    ? t.photoTab
+                    : mode === 'signature'
+                    ? t.sigTab
+                    : mode === 'document'
+                    ? t.docTab
+                    : t.thumbTab
+                )}
               </h2>
               <p className="text-xs sm:text-sm text-slate-600 max-w-sm mb-4 leading-relaxed">
-                Drag and drop your image here, browse from device, or <span className="font-bold text-blue-700 bg-blue-50 border border-blue-200 px-1.5 py-0.5 rounded">Ctrl + V</span> to paste from clipboard
+                {t.uploadSub}
               </p>
               <button
                 type="button"
                 aria-label="Choose file from your phone or computer"
                 className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm px-6 py-2.5 rounded-xl shadow-md transition-all cursor-pointer"
               >
-                Choose File from Device
+                {t.chooseBtn}
               </button>
             </div>
           ) : (
@@ -822,87 +1021,162 @@ export default function ResizerEngine({
               </div>
 
               {/* Download Action Box */}
-              {result && (
-                <div className="space-y-3 pt-2">
-                  <div className="flex flex-col sm:flex-row gap-2.5">
-                    <button
-                      type="button"
-                      onClick={handleDownload}
-                      aria-label="Download resized image in JPG format"
-                      className="flex-1 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-black text-sm sm:text-base py-3.5 px-6 rounded-2xl shadow-lg shadow-emerald-600/25 flex items-center justify-center gap-2 transition-all transform active:scale-[0.99] cursor-pointer"
-                    >
-                      <Download className="w-5 h-5" />
-                      <span>Download Ready {mode === 'photo' ? 'Photo' : 'Signature'} (JPG)</span>
-                    </button>
+              {result && (() => {
+                const isPdf = result.format === 'application/pdf';
+                const modeLabel =
+                  mode === 'photo'
+                    ? lang === 'hi'
+                      ? 'फोटो'
+                      : 'Photo'
+                    : mode === 'signature'
+                    ? lang === 'hi'
+                      ? 'हस्ताक्षर'
+                      : 'Signature'
+                    : mode === 'thumb'
+                    ? lang === 'hi'
+                      ? 'अंगूठे का निशान'
+                      : 'Thumb Impression'
+                    : lang === 'hi'
+                    ? 'दस्तावेज़'
+                    : 'Certificate';
 
-                    <button
-                      type="button"
-                      onClick={handleCopy}
-                      aria-label="Copy resized image to clipboard"
-                      className="bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs sm:text-sm py-3 px-4 rounded-2xl border border-slate-300 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
-                      title="Copy image to clipboard"
-                    >
-                      {copied ? (
-                        <>
-                          <Check className="w-4 h-4 text-emerald-700" />
-                          <span className="text-emerald-800">Copied!</span>
-                        </>
-                      ) : (
-                        <>
-                          <Copy className="w-4 h-4" />
-                          <span>Copy</span>
-                        </>
-                      )}
-                    </button>
+                return (
+                  <div className="space-y-3 pt-2">
+                    <div className="flex flex-col sm:flex-row gap-2.5">
+                      <button
+                        type="button"
+                        onClick={handleDownload}
+                        aria-label={`Download ready ${modeLabel}`}
+                        className="flex-1 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-black text-sm sm:text-base py-3.5 px-6 rounded-2xl shadow-lg shadow-emerald-600/25 flex items-center justify-center gap-2 transition-all transform active:scale-[0.99] cursor-pointer"
+                      >
+                        <Download className="w-5 h-5" />
+                        <span>{t.downloadBtn(modeLabel, isPdf)}</span>
+                      </button>
 
-                    <button
-                      type="button"
-                      onClick={handleShareWhatsApp}
-                      aria-label="Share tool with friends on WhatsApp"
-                      className="bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold text-xs sm:text-sm py-3 px-3.5 rounded-2xl border border-emerald-300 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
-                      title="Share with friends on WhatsApp"
-                    >
-                      <Share2 className="w-4 h-4" />
-                      <span className="hidden sm:inline">WhatsApp</span>
-                    </button>
-                  </div>
+                      <button
+                        type="button"
+                        onClick={handleCopy}
+                        aria-label="Copy resized image to clipboard"
+                        className="bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs sm:text-sm py-3 px-4 rounded-2xl border border-slate-300 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                        title="Copy image to clipboard"
+                      >
+                        {copied ? (
+                          <>
+                            <Check className="w-4 h-4 text-emerald-700" />
+                            <span className="text-emerald-800">Copied!</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="w-4 h-4" />
+                            <span>Copy</span>
+                          </>
+                        )}
+                      </button>
 
-                  <div className="flex items-center justify-center gap-2 text-[11px] text-slate-600 font-semibold text-center">
-                    <span>✅ 100% compliant &amp; ready to upload to official exam portals.</span>
-                  </div>
-
-                  {/* Genuine User Rating Feedback Widget */}
-                  <div className="p-3 bg-slate-50/90 rounded-2xl border border-slate-200/90 text-center space-y-1">
-                    <span className="text-[11px] font-bold text-slate-700 block">
-                      {ratingSubmitted ? 'Thank you for your rating! ⭐' : 'How was your resizing experience?'}
-                    </span>
-                    <div className="flex items-center justify-center gap-1.5">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <button
-                          key={star}
-                          type="button"
-                          onClick={() => handleRate(star)}
-                          aria-label={`Rate ${star} out of 5 stars`}
-                          className="p-1 hover:scale-125 transition-transform cursor-pointer"
-                        >
-                          <Star
-                            className={`w-4 h-4 ${
-                              star <= userRating
-                                ? 'text-amber-400 fill-current'
-                                : 'text-slate-300 hover:text-amber-300'
-                            }`}
-                          />
-                        </button>
-                      ))}
+                      <button
+                        type="button"
+                        onClick={handleShareWhatsApp}
+                        aria-label="Share tool with friends on WhatsApp"
+                        className="bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold text-xs sm:text-sm py-3 px-3.5 rounded-2xl border border-emerald-300 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                        title="Share with friends on WhatsApp"
+                      >
+                        <Share2 className="w-4 h-4" />
+                        <span className="hidden sm:inline">WhatsApp</span>
+                      </button>
                     </div>
-                    {ratingSubmitted && (
-                      <span className="text-[10px] text-emerald-700 font-semibold block">
-                        Your rating helps keep this tool free &amp; up-to-date for all applicants.
+
+                    <div className="flex items-center justify-center gap-2 text-[11px] text-slate-600 font-semibold text-center">
+                      <span>✅ {t.compliantMsg}</span>
+                    </div>
+
+                    {/* Official Exam Portals Direct Link Bar */}
+                    <div className="p-3 bg-gradient-to-br from-slate-50 to-blue-50/50 rounded-2xl border border-slate-200/90 space-y-2">
+                      <span className="text-[11px] font-black text-slate-800 tracking-wide flex items-center gap-1.5">
+                        <ArrowRight className="w-3.5 h-3.5 text-blue-600" />
+                        {t.nextStepsHeading}
                       </span>
-                    )}
+                      <div className="flex flex-wrap gap-1.5">
+                        <a
+                          href="https://ssc.gov.in"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 px-2.5 py-1 bg-white hover:bg-blue-50 text-slate-800 hover:text-blue-700 font-bold text-xs rounded-xl border border-slate-200 shadow-sm transition-all"
+                        >
+                          <span>SSC Portal</span>
+                          <ExternalLink className="w-3 h-3 text-slate-400" />
+                        </a>
+                        <a
+                          href="https://upsconline.nic.in"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 px-2.5 py-1 bg-white hover:bg-blue-50 text-slate-800 hover:text-blue-700 font-bold text-xs rounded-xl border border-slate-200 shadow-sm transition-all"
+                        >
+                          <span>UPSC OTR</span>
+                          <ExternalLink className="w-3 h-3 text-slate-400" />
+                        </a>
+                        <a
+                          href="https://rrbapply.gov.in"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 px-2.5 py-1 bg-white hover:bg-blue-50 text-slate-800 hover:text-blue-700 font-bold text-xs rounded-xl border border-slate-200 shadow-sm transition-all"
+                        >
+                          <span>RRB Apply</span>
+                          <ExternalLink className="w-3 h-3 text-slate-400" />
+                        </a>
+                        <a
+                          href="https://ibps.in"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 px-2.5 py-1 bg-white hover:bg-blue-50 text-slate-800 hover:text-blue-700 font-bold text-xs rounded-xl border border-slate-200 shadow-sm transition-all"
+                        >
+                          <span>IBPS Online</span>
+                          <ExternalLink className="w-3 h-3 text-slate-400" />
+                        </a>
+                        <a
+                          href="https://exams.nta.ac.in"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 px-2.5 py-1 bg-white hover:bg-blue-50 text-slate-800 hover:text-blue-700 font-bold text-xs rounded-xl border border-slate-200 shadow-sm transition-all"
+                        >
+                          <span>NTA Exams</span>
+                          <ExternalLink className="w-3 h-3 text-slate-400" />
+                        </a>
+                      </div>
+                    </div>
+
+                    {/* Genuine User Rating Feedback Widget */}
+                    <div className="p-3 bg-slate-50/90 rounded-2xl border border-slate-200/90 text-center space-y-1">
+                      <span className="text-[11px] font-bold text-slate-700 block">
+                        {ratingSubmitted ? t.ratingThankYou : t.ratingPrompt}
+                      </span>
+                      <div className="flex items-center justify-center gap-1.5">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <button
+                            key={star}
+                            type="button"
+                            onClick={() => handleRate(star)}
+                            aria-label={`Rate ${star} out of 5 stars`}
+                            className="p-1 hover:scale-125 transition-transform cursor-pointer"
+                          >
+                            <Star
+                              className={`w-4 h-4 ${
+                                star <= userRating
+                                  ? 'text-amber-400 fill-current'
+                                  : 'text-slate-300 hover:text-amber-300'
+                              }`}
+                            />
+                          </button>
+                        ))}
+                      </div>
+                      {ratingSubmitted && (
+                        <span className="text-[10px] text-emerald-700 font-semibold block">
+                          Your rating helps keep this tool free &amp; up-to-date for all applicants.
+                        </span>
+                      )}
+                    </div>
                   </div>
-                </div>
-              )}
+                );
+              })()}
             </div>
           )}
 

@@ -8,7 +8,7 @@ interface CropModalProps {
   targetWidth: number;
   targetHeight: number;
   onApplyCrop: (croppedFile: File) => void;
-  mode: 'photo' | 'signature';
+  mode: 'photo' | 'signature' | 'document' | 'thumb';
 }
 
 interface CropBox {
@@ -266,7 +266,7 @@ export default function CropModal({
             </div>
             <div>
               <h2 id="crop-modal-title" className="text-base font-black text-slate-900 leading-tight">
-                Crop &amp; Frame {mode === 'photo' ? 'Photo' : 'Signature'}
+                Crop &amp; Frame {mode === 'photo' ? 'Photo' : mode === 'signature' ? 'Signature' : mode === 'document' ? 'Certificate' : 'Thumb Impression'}
               </h2>
               <p className="text-[11px] text-slate-600">
                 Aspect ratio locked to {targetWidth} × {targetHeight} px official exam requirement

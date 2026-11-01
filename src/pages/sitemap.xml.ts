@@ -7,6 +7,7 @@ export const GET: APIRoute = () => {
     { url: 'https://sarkariphotoresizer.com/upsc-photo-resizer', priority: '0.9', changefreq: 'weekly' },
     { url: 'https://sarkariphotoresizer.com/signature-resizer', priority: '0.9', changefreq: 'weekly' },
     { url: 'https://sarkariphotoresizer.com/railway-photo-resizer', priority: '0.9', changefreq: 'weekly' },
+    { url: 'https://sarkariphotoresizer.com/document-pdf-resizer', priority: '0.9', changefreq: 'weekly' },
     { url: 'https://sarkariphotoresizer.com/about', priority: '0.7', changefreq: 'monthly' },
     { url: 'https://sarkariphotoresizer.com/privacy-policy', priority: '0.7', changefreq: 'monthly' },
     { url: 'https://sarkariphotoresizer.com/terms', priority: '0.7', changefreq: 'monthly' },

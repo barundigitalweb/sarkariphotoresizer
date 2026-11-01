@@ -1,0 +1,301 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ResizerEngine from '../components/ResizerEngine';
+import { CheckCircle2, AlertTriangle, ShieldCheck, Zap, HelpCircle, FileCheck, Info, Check, X, ArrowRight, FileText } from 'lucide-react';
+
+const title = "Sarkari Document & Certificate PDF Resizer 100KB - 300KB | Free Online";
+const description = "Resize and convert 10th marksheet, caste certificate, OBC, EWS, SC/ST, PwD, and domicile photos into standard 100 KB - 300 KB PDF files for SSC, UPSC OTR, Railway RRB, and IBPS portals.";
+const canonicalUrl = "https://sarkariphotoresizer.com/document-pdf-resizer";
+
+const docFaqs = [
+  {
+    q: "Why do government recruitment portals require certificate uploads in PDF format between 100 KB and 300 KB?",
+    a: "Recruitment portals such as SSC, UPSC, RRB, and state PSCs require documents in single-page PDF format between 100 KB and 300 KB to ensure text, marks, seals, and official digital signatures are razor sharp while maintaining lightweight server storage."
+  },
+  {
+    q: "Which documents require 100 KB to 300 KB PDF upload in Sarkari exams?",
+    a: "Class 10th (Matriculation) marksheet for DOB verification, 12th/Graduation degree certificates, Central OBC-NCL / EWS / SC / ST caste certificates, Domicile/PRC certificates, PwD (Disability) certificates, and Ex-Servicemen discharge books."
+  },
+  {
+    q: "How does this tool convert certificate images to PDF without uploading to a server?",
+    a: "This tool runs 100% inside your browser using client-side JavaScript. It encodes your certificate image into a standard single-page PDF 1.4 DCTDecode stream, compressing the file strictly within your chosen range (e.g., 100 KB - 300 KB) without transmitting any personal data over the internet."
+  },
+  {
+    q: "What should I do if my mobile photo of the certificate has shadows or yellow tint?",
+    a: "You can toggle the 'Auto-Clean Background & Shadows' option in our tool, or use the integrated Crop tool to trim out bedsheets, tables, or dark edges, leaving only the clean white document area before generating the PDF."
+  },
+  {
+    q: "Is this PDF accepted on SSC OTR, UPSC, and Railway RRB apply portals?",
+    a: "Yes. The generated PDF follows strict ISO-standard PDF 1.4 specifications with standard A4 / Letter proportional rendering, making it 100% compliant with National Informatics Centre (NIC) and Centre for Railway Information Systems (CRIS) application verification servers."
+  }
+];
+
+const pageSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://sarkariphotoresizer.com"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Document & Certificate PDF Resizer",
+          "item": canonicalUrl
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": docFaqs.map(faq => ({
+        "@type": "Question",
+        "name": faq.q,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": faq.a
+        }
+      }))
+    }
+  ]
+};
+---
+
+<Layout title={title} description={description} canonicalUrl={canonicalUrl}>
+  <script type="application/ld+json" set:html={JSON.stringify(pageSchema)} />
+
+  <!-- Breadcrumb -->
+  <div class="bg-slate-900 border-b border-slate-800 text-xs py-2 px-4">
+    <div class="max-w-6xl mx-auto flex items-center gap-2 text-slate-400">
+      <a href="/" class="hover:text-white transition-colors">Home</a>
+      <span>/</span>
+      <span class="text-blue-400 font-semibold">Document &amp; Certificate PDF Resizer</span>
+    </div>
+  </div>
+
+  <!-- Hero Header Section -->
+  <section class="relative bg-gradient-to-b from-blue-900 via-slate-900 to-slate-900 text-white pt-6 pb-14 sm:pt-10 sm:pb-20 px-4 overflow-hidden">
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-blue-500/10 blur-3xl pointer-events-none rounded-full"></div>
+
+    <div class="max-w-4xl mx-auto text-center relative z-10 space-y-3">
+      <div class="inline-flex items-center gap-2 bg-blue-500/20 border border-blue-400/30 text-blue-200 px-3 py-0.5 rounded-full text-xs font-black uppercase tracking-wider backdrop-blur-md">
+        <span>📄 Marksheet • Caste • EWS • Domicile • PwD</span>
+      </div>
+
+      <h1 class="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight">
+        Sarkari Document &amp; Certificate <span class="bg-gradient-to-r from-blue-400 via-sky-300 to-indigo-300 bg-clip-text text-transparent">PDF Resizer 100-300 KB</span>
+      </h1>
+
+      <p class="text-xs sm:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed">
+        Convert mobile photos of your certificates into <strong class="text-white">100 KB - 300 KB single-page PDFs</strong> accepted by SSC, UPSC OTR, Railway RRB, IBPS, and state PSC portals.
+      </p>
+
+      <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-4 pt-1 text-[11px] sm:text-xs text-slate-300 font-semibold">
+        <span class="inline-flex items-center gap-1 bg-slate-800/80 px-2.5 py-1 rounded-lg border border-slate-700/60">
+          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+          <span>Strict 100 KB - 300 KB Target Range</span>
+        </span>
+        <span class="inline-flex items-center gap-1 bg-slate-800/80 px-2.5 py-1 rounded-lg border border-slate-700/60">
+          <CheckCircle2 className="w-3.5 h-3.5 text-blue-400" />
+          <span>Standard Single-Page PDF 1.4 Output</span>
+        </span>
+        <span class="inline-flex items-center gap-1 bg-slate-800/80 px-2.5 py-1 rounded-lg border border-slate-700/60">
+          <ShieldCheck className="w-3.5 h-3.5 text-teal-400" />
+          <span>100% Private (Runs Inside Browser)</span>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Resizer Engine Section -->
+  <section class="max-w-4xl mx-auto px-4 -mt-10 sm:-mt-14 relative z-20 pb-12">
+    <div class="bg-white rounded-3xl shadow-2xl shadow-slate-950/20 border border-slate-200/80 overflow-hidden p-4 sm:p-8">
+      <ResizerEngine client:idle initialMode="document" />
+    </div>
+  </section>
+
+  <!-- Government Portals Document Requirements Table -->
+  <section class="max-w-5xl mx-auto px-4 py-8">
+    <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
+      <div class="border-b border-slate-100 pb-4">
+        <span class="text-xs font-black text-blue-600 uppercase tracking-wider block">Official Portal Standards</span>
+        <h2 class="text-xl sm:text-2xl font-black text-slate-900 mt-1">
+          Document &amp; Certificate Upload Size Guidelines 2026
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-600 mt-1">
+          Official PDF and image file size requirements for major recruitment authorities in India.
+        </p>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs sm:text-sm border-collapse">
+          <thead>
+            <tr class="bg-slate-100/80 text-slate-700 font-bold border-b border-slate-200">
+              <th class="py-3 px-4">Exam / Portal</th>
+              <th class="py-3 px-4">Required Documents</th>
+              <th class="py-3 px-4">Allowed Format</th>
+              <th class="py-3 px-4">Size Limit (Min - Max)</th>
+              <th class="py-3 px-4">Resolution / Specs</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
+            <tr class="hover:bg-slate-50/80">
+              <td class="py-3 px-4 font-bold text-slate-900">SSC CGL / CHSL / MTS / GD</td>
+              <td class="py-3 px-4">10th Marksheet, Caste Certificate, PwD</td>
+              <td class="py-3 px-4 font-mono font-bold text-blue-700">PDF / JPG</td>
+              <td class="py-3 px-4 font-bold text-emerald-700">100 KB – 300 KB</td>
+              <td class="py-3 px-4">Clean A4 scan, 150-200 DPI</td>
+            </tr>
+            <tr class="hover:bg-slate-50/80">
+              <td class="py-3 px-4 font-bold text-slate-900">UPSC Civil Services / NDA / CDS</td>
+              <td class="py-3 px-4">Matriculation Certificate, Category, DAF</td>
+              <td class="py-3 px-4 font-mono font-bold text-blue-700">PDF only</td>
+              <td class="py-3 px-4 font-bold text-emerald-700">100 KB – 300 KB</td>
+              <td class="py-3 px-4">Single page PDF, no password lock</td>
+            </tr>
+            <tr class="hover:bg-slate-50/80">
+              <td class="py-3 px-4 font-bold text-slate-900">Railway RRB (ALP, Tech, NTPC, Group D)</td>
+              <td class="py-3 px-4">SC/ST Free Travel Certificate, ITI/Degree</td>
+              <td class="py-3 px-4 font-mono font-bold text-blue-700">PDF / JPG</td>
+              <td class="py-3 px-4 font-bold text-emerald-700">100 KB – 300 KB</td>
+              <td class="py-3 px-4">Legible issuing authority stamp &amp; signature</td>
+            </tr>
+            <tr class="hover:bg-slate-50/80">
+              <td class="py-3 px-4 font-bold text-slate-900">IBPS PO / Clerk / SO / RRB</td>
+              <td class="py-3 px-4">Handwritten Declaration, LTI Thumb</td>
+              <td class="py-3 px-4 font-mono font-bold text-blue-700">JPG / PDF</td>
+              <td class="py-3 px-4 font-bold text-emerald-700">50 KB – 100 KB (Decl.) / 10-50 KB (Thumb)</td>
+              <td class="py-3 px-4">White paper, black ink, clear text</td>
+            </tr>
+            <tr class="hover:bg-slate-50/80">
+              <td class="py-3 px-4 font-bold text-slate-900">NTA NEET / JEE Main / CUET</td>
+              <td class="py-3 px-4">Category Certificate, Class 10 Certificate</td>
+              <td class="py-3 px-4 font-mono font-bold text-blue-700">PDF only</td>
+              <td class="py-3 px-4 font-bold text-emerald-700">50 KB – 300 KB</td>
+              <td class="py-3 px-4">Unblurred text, scanned upright</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- How to Resize Marksheet & Certificate to 100-300 KB PDF -->
+  <section class="max-w-5xl mx-auto px-4 py-6">
+    <div class="bg-gradient-to-br from-slate-900 to-blue-950 rounded-3xl p-6 sm:p-10 text-white shadow-xl space-y-8">
+      <div>
+        <span class="text-xs font-black text-sky-400 uppercase tracking-widest block">Step-by-Step Instructions</span>
+        <h2 class="text-xl sm:text-3xl font-black mt-1">
+          How to Convert Mobile Photos into 100-300 KB PDF for Exam Applications
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-300 mt-2 max-w-2xl leading-relaxed">
+          Most mobile camera captures are 3 MB to 8 MB in size, which causes immediate upload rejection on government recruitment servers. Follow these 4 easy steps:
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="bg-white/10 rounded-2xl p-5 border border-white/10 backdrop-blur-sm space-y-2">
+          <span class="w-7 h-7 rounded-full bg-blue-500 text-white font-black text-xs flex items-center justify-center">1</span>
+          <h3 class="font-bold text-sm text-white">Capture in Good Light</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Place your certificate flat on a table in daylight. Hold your phone parallel to the document to avoid perspective distortion.
+          </p>
+        </div>
+
+        <div class="bg-white/10 rounded-2xl p-5 border border-white/10 backdrop-blur-sm space-y-2">
+          <span class="w-7 h-7 rounded-full bg-blue-500 text-white font-black text-xs flex items-center justify-center">2</span>
+          <h3 class="font-bold text-sm text-white">Upload to Resizer</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Click &ldquo;Certificate (PDF)&rdquo; above, then drop your JPG or PNG image. The tool automatically sets the target to 100 KB – 300 KB.
+          </p>
+        </div>
+
+        <div class="bg-white/10 rounded-2xl p-5 border border-white/10 backdrop-blur-sm space-y-2">
+          <span class="w-7 h-7 rounded-full bg-blue-500 text-white font-black text-xs flex items-center justify-center">3</span>
+          <h3 class="font-bold text-sm text-white">Crop Borders &amp; Shadows</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Click &ldquo;Crop Tool&rdquo; to slice out extra table borders. Use &ldquo;Auto-Clean Background&rdquo; to eliminate yellow shadows.
+          </p>
+        </div>
+
+        <div class="bg-white/10 rounded-2xl p-5 border border-white/10 backdrop-blur-sm space-y-2">
+          <span class="w-7 h-7 rounded-full bg-emerald-500 text-white font-black text-xs flex items-center justify-center">4</span>
+          <h3 class="font-bold text-sm text-white">Download Ready PDF</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Click &ldquo;Download Ready Certificate (PDF)&rdquo;. Your file is instantly generated with zero watermarks and strict size compliance.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQs Section -->
+  <section class="max-w-4xl mx-auto px-4 py-8">
+    <div class="space-y-4">
+      <div class="text-center space-y-1 pb-4">
+        <span class="text-xs font-black text-blue-600 uppercase tracking-wider block">Got Questions?</span>
+        <h2 class="text-2xl font-black text-slate-900">Frequently Asked Questions</h2>
+        <p class="text-xs sm:text-sm text-slate-600">Common questions regarding marksheet and caste certificate PDF resizing.</p>
+      </div>
+
+      <div class="space-y-3">
+        {docFaqs.map((faq) => (
+          <details class="group bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm transition-all open:ring-2 open:ring-blue-500/20">
+            <summary class="flex items-center justify-between p-4 sm:p-5 font-bold text-xs sm:text-sm text-slate-900 cursor-pointer select-none">
+              <span>{faq.q}</span>
+              <span class="ml-2 text-slate-400 group-open:rotate-180 transition-transform">▼</span>
+            </summary>
+            <div class="px-4 pb-4 sm:px-5 sm:pb-5 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
+              {faq.a}
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Cross-Navigation Links to Other Tools -->
+  <section class="max-w-4xl mx-auto px-4 pb-12">
+    <div class="bg-slate-100 rounded-3xl p-6 border border-slate-200 space-y-4">
+      <span class="text-xs font-black text-slate-800 uppercase tracking-wider block">More Sarkari Photo Tools</span>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <a
+          href="/ssc-photo-resizer"
+          class="flex items-center justify-between p-3.5 bg-white rounded-2xl border border-slate-200 hover:border-blue-400 hover:shadow-md transition-all group"
+        >
+          <div>
+            <span class="text-xs font-bold text-slate-900 block group-hover:text-blue-600">SSC Photo &amp; Sign</span>
+            <span class="text-[11px] text-slate-500">20-50 KB &bull; 10-20 KB</span>
+          </div>
+          <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 transition-transform group-hover:translate-x-1" />
+        </a>
+
+        <a
+          href="/upsc-photo-resizer"
+          class="flex items-center justify-between p-3.5 bg-white rounded-2xl border border-slate-200 hover:border-blue-400 hover:shadow-md transition-all group"
+        >
+          <div>
+            <span class="text-xs font-bold text-slate-900 block group-hover:text-blue-600">UPSC OTR Resizer</span>
+            <span class="text-[11px] text-slate-500">20-300 KB &bull; Name &amp; DOP</span>
+          </div>
+          <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 transition-transform group-hover:translate-x-1" />
+        </a>
+
+        <a
+          href="/"
+          class="flex items-center justify-between p-3.5 bg-white rounded-2xl border border-slate-200 hover:border-blue-400 hover:shadow-md transition-all group"
+        >
+          <div>
+            <span class="text-xs font-bold text-slate-900 block group-hover:text-blue-600">All Exam Resizer</span>
+            <span class="text-[11px] text-slate-500">Railway, IBPS, NTA &amp; More</span>
+          </div>
+          <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 transition-transform group-hover:translate-x-1" />
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>

@@ -1,10 +1,14 @@
+import { createPdfFromJpeg } from './pdf-generator';
+
+export type ResizerMode = 'photo' | 'signature' | 'document' | 'thumb';
+
 export interface ProcessImageOptions {
   file: File;
   targetWidth: number;
   targetHeight: number;
   minKb: number;
   maxKb: number;
-  mode: 'photo' | 'signature';
+  mode: ResizerMode;
   addDop?: boolean;
   candidateName?: string;
   photoDate?: string;
@@ -258,8 +262,8 @@ export async function processImage(options: ProcessImageOptions): Promise<Proces
   ctx.drawImage(img, -scaledDrawWidth / 2, -scaledDrawHeight / 2, scaledDrawWidth, scaledDrawHeight);
   ctx.restore();
 
-  // Apply signature enhancement if in signature mode
-  if (mode === 'signature' && cleanSignatureBackground) {
+  // Apply signature/thumb enhancement if requested
+  if ((mode === 'signature' || mode === 'thumb') && cleanSignatureBackground) {
     applySignatureAdaptiveThreshold(ctx, targetWidth, targetHeight);
   }
 
@@ -320,6 +324,28 @@ export async function processImage(options: ProcessImageOptions): Promise<Proces
     const targetPaddedBytes = Math.round(idealTargetBytes);
     const padded = padJpegToTargetBytes(bytes, targetPaddedBytes);
     bestBlob = new Blob([padded], { type: 'image/jpeg' });
+  }
+
+  // If document mode, wrap compressed JPEG into a valid PDF 1.4 document!
+  if (mode === 'document') {
+    const arrayBuffer = await bestBlob.arrayBuffer();
+    const jpegBytes = new Uint8Array(arrayBuffer);
+    const pdfBytes = createPdfFromJpeg(jpegBytes, targetWidth, targetHeight);
+    const pdfBlob = new Blob([pdfBytes], { type: 'application/pdf' });
+    const pdfSizeKb = Math.round((pdfBlob.size / 1024) * 10) / 10;
+    const isPdfValid = pdfBlob.size >= minBytes && pdfBlob.size <= maxBytes;
+    const pdfDataUrl = URL.createObjectURL(pdfBlob);
+
+    return {
+      blob: pdfBlob,
+      dataUrl: pdfDataUrl,
+      width: targetWidth,
+      height: targetHeight,
+      sizeBytes: pdfBlob.size,
+      sizeKb: pdfSizeKb,
+      isValid: isPdfValid,
+      format: 'application/pdf'
+    };
   }
 
   const finalSizeKb = Math.round((bestBlob.size / 1024) * 10) / 10;
