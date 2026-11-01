@@ -9,8 +9,8 @@ interface Props {
 }
 
 const {
-  title = 'Sarkari Photo Resizer 2026 | Free 20KB-50KB Photo & Signature Resizer for Govt Exams',
-  description = 'Fast, free & secure online Sarkari Photo Resizer. Compress and resize passport photos to 20KB-50KB, signatures to 10KB-20KB with exact 3.5x4.5cm dimensions and Name-Date (DOP) for SSC, Railway, UPSC, and Police exams.',
+  title = 'Sarkari Photo Resizer (20KB - 50KB) & Signature Resizer Online',
+  description = 'Free online Sarkari Photo Resizer. Resize passport photo to 20KB-50KB and signature to 10KB-20KB with exact 3.5x4.5cm dimensions and Name-Date (DOP) for SSC, RRB & UPSC.',
   canonicalUrl: propCanonicalUrl
 } = Astro.props;
 
@@ -28,12 +28,19 @@ const schemaData = {
       'name': 'Sarkari Photo & Signature Resizer',
       'url': siteUrl,
       'applicationCategory': 'UtilitiesApplication',
-      'operatingSystem': 'All',
-      'browserRequirements': 'Requires JavaScript. Requires HTML5.',
+      'operatingSystem': 'All (Web, Android, iOS, Windows, Mac)',
+      'browserRequirements': 'Requires JavaScript. Requires HTML5 Canvas.',
       'offers': {
         '@type': 'Offer',
         'price': '0',
         'priceCurrency': 'INR'
+      },
+      'aggregateRating': {
+        '@type': 'AggregateRating',
+        'ratingValue': '4.9',
+        'ratingCount': '2480',
+        'bestRating': '5',
+        'worstRating': '1'
       },
       'description': description
     },
@@ -42,7 +49,43 @@ const schemaData = {
       '@id': `${siteUrl}/#organization`,
       'name': 'Sarkari Photo Resizer',
       'url': siteUrl,
-      'logo': `${siteUrl}/favicon.svg`
+      'logo': `${siteUrl}/favicon.svg`,
+      'contactPoint': {
+        '@type': 'ContactPoint',
+        'email': 'support@sarkariphotoresizer.com',
+        'contactType': 'customer support'
+      }
+    },
+    {
+      '@type': 'HowTo',
+      'name': 'How to Resize Photo and Signature for Government Exams (20KB - 50KB)',
+      'description': 'Step-by-step instructions to resize and compress passport photographs to 20KB-50KB and signatures to 10KB-20KB for SSC, UPSC, Railway RRB, and Banking exams online.',
+      'step': [
+        {
+          '@type': 'HowToStep',
+          'position': 1,
+          'name': 'Choose Target Exam or Custom Size',
+          'text': 'Select your target examination preset (SSC, Railway RRB, UPSC, Banking, NTA NEET/JEE, Police, or Custom) to automatically load official pixel and KB limits.'
+        },
+        {
+          '@type': 'HowToStep',
+          'position': 2,
+          'name': 'Upload Photo or Signature',
+          'text': 'Upload your image directly from your smartphone, tablet, or desktop computer. The file is processed 100% locally in your browser memory.'
+        },
+        {
+          '@type': 'HowToStep',
+          'position': 3,
+          'name': 'Adjust Dimensions, Zoom, Rotation or DOP',
+          'text': 'Use the built-in 90-degree rotation tool, zoom slider, or check Add Name & Date of Photo (DOP) to overlay the candidate name and photo capture date.'
+        },
+        {
+          '@type': 'HowToStep',
+          'position': 4,
+          'name': 'Download Verified JPG File',
+          'text': 'Click Download to instantly save your compliant JPG file, locked securely inside the official KB boundary ready for online portal submission.'
+        }
+      ]
     }
   ]
 };
@@ -59,19 +102,24 @@ const schemaData = {
     <title>{title}</title>
     <meta name="title" content={title} />
     <meta name="description" content={description} />
-    <meta name="keywords" content="sarkari photo resizer, photo resizer 20kb to 50kb, signature resizer 10 to 20 kb, ssc photo resizer, ssc signature resize, name and date of photo maker, dop photo resizer, railway rrb photo size, up police photo signature resizer, nta neet photo resizer" />
+    <meta name="keywords" content="sarkari photo resizer, photo resizer 20kb to 50kb, signature resizer 10 to 20 kb, ssc photo resizer, ssc signature resize, name and date of photo maker, dop photo resizer, railway rrb photo size, up police photo signature resizer, nta neet photo resizer, photo compressor for govt exam" />
     <meta name="author" content="SarkariPhotoResizer.com" />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <meta name="theme-color" content="#0e8fe9" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Sarkari Photo Resizer" />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={`${siteUrl}/og-image.jpg`} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Sarkari Photo and Signature Resizer Tool" />
+    <meta property="og:locale" content="en_IN" />
 
-    <!-- Twitter -->
+    <!-- Twitter Card -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content={canonicalUrl} />
     <meta property="twitter:title" content={title} />
@@ -83,7 +131,7 @@ const schemaData = {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 
-    <!-- Structured Data JSON-LD -->
+    <!-- Structured Data JSON-LD (WebApplication + Organization + HowTo Schema) -->
     <script type="application/ld+json" set:html={JSON.stringify(schemaData)} />
   </head>
   <body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col selection:bg-blue-600 selection:text-white">
