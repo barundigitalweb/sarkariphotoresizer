@@ -19,7 +19,8 @@ import {
   ZoomIn,
   Check,
   Share2,
-  ArrowRight
+  ArrowRight,
+  Star
 } from 'lucide-react';
 
 export default function ResizerEngine() {
@@ -57,6 +58,31 @@ export default function ResizerEngine() {
 
   // Signature enhancement
   const [cleanSignature, setCleanSignature] = useState<boolean>(true);
+
+  // User Interactive Rating State
+  const [userRating, setUserRating] = useState<number>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('spr_user_rating');
+      return saved ? Number(saved) : 0;
+    }
+    return 0;
+  });
+  const [ratingSubmitted, setRatingSubmitted] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      return Boolean(localStorage.getItem('spr_user_rating'));
+    }
+    return false;
+  });
+
+  const handleRate = (stars: number) => {
+    setUserRating(stars);
+    setRatingSubmitted(true);
+    try {
+      localStorage.setItem('spr_user_rating', String(stars));
+    } catch {
+      // localStorage fallback
+    }
+  };
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const previousDataUrlRef = useRef<string | null>(null);
@@ -714,6 +740,37 @@ export default function ResizerEngine() {
 
                   <div className="flex items-center justify-center gap-2 text-[11px] text-slate-600 font-semibold text-center">
                     <span>✅ 100% compliant &amp; ready to upload to official exam portals.</span>
+                  </div>
+
+                  {/* Genuine User Rating Feedback Widget */}
+                  <div className="p-3 bg-slate-50/90 rounded-2xl border border-slate-200/90 text-center space-y-1">
+                    <span className="text-[11px] font-bold text-slate-700 block">
+                      {ratingSubmitted ? 'Thank you for your rating! ⭐' : 'How was your resizing experience?'}
+                    </span>
+                    <div className="flex items-center justify-center gap-1.5">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <button
+                          key={star}
+                          type="button"
+                          onClick={() => handleRate(star)}
+                          aria-label={`Rate ${star} out of 5 stars`}
+                          className="p-1 hover:scale-125 transition-transform cursor-pointer"
+                        >
+                          <Star
+                            className={`w-4 h-4 ${
+                              star <= userRating
+                                ? 'text-amber-400 fill-current'
+                                : 'text-slate-300 hover:text-amber-300'
+                            }`}
+                          />
+                        </button>
+                      ))}
+                    </div>
+                    {ratingSubmitted && (
+                      <span className="text-[10px] text-emerald-700 font-semibold block">
+                        Your rating helps keep this tool free &amp; up-to-date for all applicants.
+                      </span>
+                    )}
                   </div>
                 </div>
               )}
