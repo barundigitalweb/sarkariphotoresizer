@@ -1,0 +1,96 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  canonicalUrl?: string;
+}
+
+const {
+  title = 'Sarkari Photo Resizer 2026 | Free 20KB-50KB Photo & Signature Resizer for Govt Exams',
+  description = 'Fast, free & secure online Sarkari Photo Resizer. Compress and resize passport photos to 20KB-50KB, signatures to 10KB-20KB with exact 3.5x4.5cm dimensions and Name-Date (DOP) for SSC, Railway, UPSC, and Police exams.',
+  canonicalUrl: propCanonicalUrl
+} = Astro.props;
+
+const siteUrl = 'https://sarkariphotoresizer.com';
+const rawPathname = Astro.url.pathname;
+const cleanPath = rawPathname === '/' ? '' : rawPathname.replace(/\/$/, '');
+const canonicalUrl = propCanonicalUrl || `${siteUrl}${cleanPath || '/'}`;
+
+const schemaData = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      '@id': `${siteUrl}/#app`,
+      'name': 'Sarkari Photo & Signature Resizer',
+      'url': siteUrl,
+      'applicationCategory': 'UtilitiesApplication',
+      'operatingSystem': 'All',
+      'browserRequirements': 'Requires JavaScript. Requires HTML5.',
+      'offers': {
+        '@type': 'Offer',
+        'price': '0',
+        'priceCurrency': 'INR'
+      },
+      'description': description
+    },
+    {
+      '@type': 'Organization',
+      '@id': `${siteUrl}/#organization`,
+      'name': 'Sarkari Photo Resizer',
+      'url': siteUrl,
+      'logo': `${siteUrl}/favicon.svg`
+    }
+  ]
+};
+---
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- Primary Meta Tags -->
+    <title>{title}</title>
+    <meta name="title" content={title} />
+    <meta name="description" content={description} />
+    <meta name="keywords" content="sarkari photo resizer, photo resizer 20kb to 50kb, signature resizer 10 to 20 kb, ssc photo resizer, ssc signature resize, name and date of photo maker, dop photo resizer, railway rrb photo size, up police photo signature resizer, nta neet photo resizer" />
+    <meta name="author" content="SarkariPhotoResizer.com" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#0e8fe9" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={`${siteUrl}/og-image.jpg`} />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonicalUrl} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={`${siteUrl}/og-image.jpg`} />
+
+    <!-- Google Fonts Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+    <!-- Structured Data JSON-LD -->
+    <script type="application/ld+json" set:html={JSON.stringify(schemaData)} />
+  </head>
+  <body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col selection:bg-blue-600 selection:text-white">
+    <Header />
+    <main class="flex-1">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

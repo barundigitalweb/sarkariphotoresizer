@@ -1,0 +1,28 @@
+{
+  "name": "sarkari-photo-resizer",
+  "version": "1.0.0",
+  "description": "Fast, 100% Free & Secure Online Sarkari Photo, Signature & Exam Document Resizer Tool",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev --port 4321",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/react": "^4.2.0",
+    "@astrojs/tailwind": "^5.1.5",
+    "astro": "^5.1.0",
+    "canvas-confetti": "^1.9.4",
+    "lucide-react": "^0.474.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tailwindcss": "^3.4.17"
+  },
+  "devDependencies": {
+    "@types/canvas-confetti": "^1.9.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0"
+  }
+}

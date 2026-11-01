@@ -1,0 +1,135 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ResizerEngine from '../components/ResizerEngine';
+import ExamPresetsGuide from '../components/ExamPresetsGuide.astro';
+import FaqSection from '../components/FaqSection.astro';
+import { ShieldCheck, Zap, Sparkles, CheckCircle2 } from 'lucide-react';
+---
+
+<Layout>
+  <!-- Hero Header Section -->
+  <section class="relative bg-gradient-to-b from-blue-900 via-slate-900 to-slate-900 text-white pt-12 pb-24 px-4 overflow-hidden">
+    <!-- Subtle Background Glows -->
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-blue-500/10 blur-3xl pointer-events-none rounded-full"></div>
+
+    <div class="max-w-4xl mx-auto text-center relative z-10 space-y-4">
+      <!-- Top Pill -->
+      <div class="inline-flex items-center gap-2 bg-blue-500/20 border border-blue-400/30 text-blue-200 px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider backdrop-blur-md">
+        <span>⚡ 100% Free • No Signup • No Watermark</span>
+      </div>
+
+      <!-- Main Headline -->
+      <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight">
+        Sarkari <span class="bg-gradient-to-r from-blue-400 via-sky-300 to-indigo-300 bg-clip-text text-transparent">Photo &amp; Signature</span> Resizer
+      </h1>
+
+      <!-- Subtitle -->
+      <p class="text-sm sm:text-base lg:text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed">
+        Fast, on-device image compressor for Indian competitive exams. Automatically locks photos between 
+        <strong class="text-white">20 KB &amp; 50 KB</strong>, signatures to <strong class="text-white">10 KB &amp; 20 KB</strong> with official passport dimensions and Name-Date (DOP).
+      </p>
+
+      <!-- Trust Badges Row -->
+      <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-6 pt-2 text-xs text-slate-300 font-semibold">
+        <span class="flex items-center gap-1.5 bg-slate-800/60 px-3 py-1 rounded-lg border border-slate-700/60">
+          <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+          <span>SSC, Railway, UPSC Presets</span>
+        </span>
+        <span class="flex items-center gap-1.5 bg-slate-800/60 px-3 py-1 rounded-lg border border-slate-700/60">
+          <ShieldCheck className="w-4 h-4 text-blue-400" />
+          <span>Zero Server Uploads (100% Private)</span>
+        </span>
+        <span class="flex items-center gap-1.5 bg-slate-800/60 px-3 py-1 rounded-lg border border-slate-700/60">
+          <Zap className="w-4 h-4 text-amber-400" />
+          <span>0.1s Instant Processing</span>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Resizer Tool Container (Overlapping Hero) -->
+  <section id="tool" class="max-w-6xl mx-auto px-4 -mt-14 relative z-20 mb-16">
+    <ResizerEngine client:load />
+  </section>
+
+  <!-- Content & Educational Guide Container -->
+  <div class="max-w-6xl mx-auto px-4 space-y-16 pb-16">
+    <!-- 3-Step How It Works -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/80">
+      <div class="text-center max-w-xl mx-auto mb-8 space-y-1">
+        <span class="text-xs font-black text-blue-600 uppercase tracking-wider">Simple 3-Step Process</span>
+        <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">How to Resize Your Exam Photo in Seconds</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-slate-50 rounded-2xl p-6 border border-slate-200/60 space-y-3 relative">
+          <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black text-base shadow-md shadow-blue-500/20">
+            1
+          </div>
+          <h3 class="font-bold text-slate-900 text-base">Select Exam &amp; Upload</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Choose your target exam (SSC, Railway, UPSC, Banking, or Custom) and upload your photo or signature directly from your phone or PC.
+          </p>
+        </div>
+
+        <div class="bg-slate-50 rounded-2xl p-6 border border-slate-200/60 space-y-3 relative">
+          <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-black text-base shadow-md shadow-indigo-500/20">
+            2
+          </div>
+          <h3 class="font-bold text-slate-900 text-base">Automatic KB &amp; Dimension Lock</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Our smart algorithm crops your image to exact aspect ratios, cleans signature backgrounds, and compresses the file into the official KB window.
+          </p>
+        </div>
+
+        <div class="bg-slate-50 rounded-2xl p-6 border border-slate-200/60 space-y-3 relative">
+          <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-black text-base shadow-md shadow-emerald-500/20">
+            3
+          </div>
+          <h3 class="font-bold text-slate-900 text-base">Instant Download (JPG)</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Download your validated, portal-ready JPG file with a single tap. Upload it straight to your exam application without any "File Size Invalid" errors.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Official Exam Presets Specification Table -->
+    <ExamPresetsGuide />
+
+    <!-- In-Depth Helpful Guide (SEO Value) -->
+    <article class="bg-white rounded-3xl p-6 sm:p-10 shadow-sm border border-slate-200/80 prose prose-slate max-w-none text-xs sm:text-sm leading-relaxed space-y-4">
+      <h2 class="text-lg sm:text-2xl font-black text-slate-900 mb-2">
+        Why Do Government Exam Portals Have Strict Photo &amp; Signature Limits?
+      </h2>
+      <p class="text-slate-600">
+        Every year, government recruitment bodies such as the <strong>Staff Selection Commission (SSC)</strong>, 
+        <strong>Railway Recruitment Boards (RRB)</strong>, <strong>Union Public Service Commission (UPSC)</strong>, 
+        and <strong>Institute of Banking Personnel Selection (IBPS)</strong> receive millions of online applications. 
+        To optimize server storage and ensure fast database processing during admit card printing, these portals enforce 
+        rigorous boundary checks on file sizes (strictly between 20 KB and 50 KB for photographs, and 10 KB to 20 KB for signatures).
+      </p>
+
+      <h3 class="text-base sm:text-lg font-bold text-slate-900 mt-4">
+        Top Reasons for Application Rejection and How to Avoid Them:
+      </h3>
+      <ul class="list-disc pl-5 space-y-2 text-slate-600">
+        <li>
+          <strong>File Size Outside Required Range:</strong> Uploading an image smaller than 20 KB or larger than 50 KB triggers an automatic portal rejection. SarkariPhotoResizer uses binary search image compression to ensure your file lands precisely within the approved window.
+        </li>
+        <li>
+          <strong>Blurry or Distorted Signatures:</strong> Many candidates capture photos of their signature on lined notebook paper under dim room lighting. Our signature contrast filter removes background paper shadows, turning blue or black ink into crisp lines on 100% white.
+        </li>
+        <li>
+          <strong>Missing Name and Date of Photo (DOP):</strong> Certain recruitment notices strictly mandate that the candidate's name and the date of taking the photograph must be visible on the picture. Our tool allows you to overlay this standard white footer strip in one second.
+        </li>
+        <li>
+          <strong>Spectacles &amp; Caps:</strong> Always avoid wearing dark goggles, caps, or side-angle poses. Ensure both ears and the full frontal face are clearly visible against a light or white background.
+        </li>
+      </ul>
+    </article>
+
+    <!-- FAQ Section -->
+    <FaqSection />
+  </div>
+</Layout>

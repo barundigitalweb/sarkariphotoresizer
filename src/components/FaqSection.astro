@@ -1,0 +1,64 @@
+---
+const faqs = [
+  {
+    q: 'How do I resize my photo to 20KB to 50KB for SSC online application?',
+    a: 'Simply upload your passport photograph on SarkariPhotoResizer.com, select the "SSC" preset from the exam dropdown, and our intelligent compressor will automatically adjust the pixel dimensions (350x450 px) and lock the file size comfortably between 20 KB and 50 KB. You can then download the ready JPG image in one click.'
+  },
+  {
+    q: 'What is Name and Date of Photo (DOP) and how do I add it?',
+    a: 'Several recruitment boards (like UPSC, UKPSC, and earlier SSC cycles) require the candidate\'s full name and the date the photograph was captured printed on a white strip at the bottom of the photo. Check the "Add Name & Date of Photo (DOP)" box in our tool, type your name and the date, and the tool will automatically render the official white footer banner onto your photo without covering your face.'
+  },
+  {
+    q: 'Is it safe to upload my personal passport photo and signature here?',
+    a: 'Yes, 100% safe. SarkariPhotoResizer processes everything client-side inside your browser memory using HTML5 Canvas. Your photograph, signature, and sensitive documents are NEVER uploaded, stored, or transmitted to any external server or cloud database.'
+  },
+  {
+    q: 'Why was my signature rejected on the government recruitment portal?',
+    a: 'Most government portals reject signatures if the file size is outside 10 KB - 20 KB, or if the background is dark/creased or taken with a blue pen on lined notebook paper. Our Signature Resizer features an "Auto-Clean Signature Background" algorithm that automatically filters out paper tints, delivering sharp black ink on a 100% pure white background, and automatically pads the file so it meets the minimum KB requirement.'
+  },
+  {
+    q: 'Does this tool work on mobile phones and tablets?',
+    a: 'Yes! SarkariPhotoResizer is 100% responsive and works seamlessly across Android, iPhone, iPad, tablets, laptops, and cyber cafe desktop PCs without installing any heavy apps.'
+  }
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  'mainEntity': faqs.map((faq) => ({
+    '@type': 'Question',
+    'name': faq.q,
+    'acceptedAnswer': {
+      '@type': 'Answer',
+      'text': faq.a
+    }
+  }))
+};
+---
+<section id="faq" class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/80 space-y-6">
+  <div>
+    <span class="inline-flex items-center gap-1.5 bg-indigo-50 text-indigo-700 text-xs font-black px-2.5 py-1 rounded-full uppercase tracking-wider mb-2">
+      💡 Frequently Asked Questions
+    </span>
+    <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+      Everything You Need to Know About Government Exam Photo Sizing
+    </h2>
+  </div>
+
+  <div class="space-y-4">
+    {faqs.map((faq, idx) => (
+      <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-2">
+        <h3 class="text-sm sm:text-base font-bold text-slate-900 flex items-start gap-2">
+          <span class="text-blue-600 font-black">Q{idx + 1}.</span>
+          <span>{faq.q}</span>
+        </h3>
+        <p class="text-xs sm:text-sm text-slate-600 pl-6 leading-relaxed">
+          {faq.a}
+        </p>
+      </div>
+    ))}
+  </div>
+
+  <!-- FAQPage Schema for Rich Snippets -->
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+</section>
