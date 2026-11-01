@@ -11,6 +11,8 @@ export interface ProcessImageOptions {
   cleanSignatureBackground?: boolean;
   rotation?: number; // 0, 90, 180, 270
   zoom?: number; // 1.0 to 2.5
+  panX?: number; // horizontal offset in px
+  panY?: number; // vertical offset in px
 }
 
 export interface ProcessImageResult {
@@ -205,7 +207,9 @@ export async function processImage(options: ProcessImageOptions): Promise<Proces
     photoDate,
     cleanSignatureBackground,
     rotation = 0,
-    zoom = 1.0
+    zoom = 1.0,
+    panX = 0,
+    panY = 0
   } = options;
 
   const img = await loadImageFromFile(file);
@@ -237,9 +241,9 @@ export async function processImage(options: ProcessImageOptions): Promise<Proces
   const scaledDrawWidth = img.naturalWidth * finalScale;
   const scaledDrawHeight = img.naturalHeight * finalScale;
 
-  // Center within the visible photo region
-  const centerX = targetWidth / 2;
-  const centerY = visiblePhotoHeight / 2;
+  // Center within the visible photo region + optional user pan
+  const centerX = targetWidth / 2 + panX;
+  const centerY = visiblePhotoHeight / 2 + panY;
 
   ctx.save();
   // Clip to visible photo area to ensure nothing bleeds into the DOP footer

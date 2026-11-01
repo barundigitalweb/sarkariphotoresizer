@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { EXAM_PRESETS, type ExamPreset } from '../lib/presets';
 import { processImage, type ProcessImageResult } from '../lib/image-processor';
+import CropModal from './CropModal';
 import {
   Upload,
   Download,
@@ -20,7 +21,8 @@ import {
   Check,
   Share2,
   ArrowRight,
-  Star
+  Star,
+  Crop
 } from 'lucide-react';
 
 export interface ResizerEngineProps {
@@ -37,6 +39,12 @@ export default function ResizerEngine({
   const [mode, setMode] = useState<'photo' | 'signature'>(initialMode);
   const [selectedPresetId, setSelectedPresetId] = useState<string>(initialPresetId);
   const [file, setFile] = useState<File | null>(null);
+  const [originalFile, setOriginalFile] = useState<File | null>(null);
+  const [isCropModalOpen, setIsCropModalOpen] = useState<boolean>(false);
+  const [isCropped, setIsCropped] = useState<boolean>(false);
+  const [panX, setPanX] = useState<number>(0);
+  const [panY, setPanY] = useState<number>(0);
+  const [showFaceGuidePreview, setShowFaceGuidePreview] = useState<boolean>(false);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [result, setResult] = useState<ProcessImageResult | null>(null);
   const [errorMsg, setErrorMsg] = useState<string>('');
@@ -136,6 +144,10 @@ export default function ResizerEngine({
           const pastedFile = items[i].getAsFile();
           if (pastedFile) {
             setFile(pastedFile);
+            setOriginalFile(pastedFile);
+            setIsCropped(false);
+            setPanX(0);
+            setPanY(0);
             setRotation(0);
             setZoom(1.0);
             break;
@@ -169,7 +181,9 @@ export default function ResizerEngine({
           photoDate,
           cleanSignatureBackground: mode === 'signature' && cleanSignature,
           rotation,
-          zoom
+          zoom,
+          panX,
+          panY
         });
 
         if (isMounted) {
@@ -204,13 +218,19 @@ export default function ResizerEngine({
     photoDate,
     cleanSignature,
     rotation,
-    zoom
+    zoom,
+    panX,
+    panY
   ]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.files?.[0];
     if (selected) {
       setFile(selected);
+      setOriginalFile(selected);
+      setIsCropped(false);
+      setPanX(0);
+      setPanY(0);
       setRotation(0);
       setZoom(1.0);
     }
@@ -221,6 +241,30 @@ export default function ResizerEngine({
     const dropped = e.dataTransfer.files?.[0];
     if (dropped && dropped.type.startsWith('image/')) {
       setFile(dropped);
+      setOriginalFile(dropped);
+      setIsCropped(false);
+      setPanX(0);
+      setPanY(0);
+      setRotation(0);
+      setZoom(1.0);
+    }
+  };
+
+  const handleApplyCrop = (croppedFile: File) => {
+    setFile(croppedFile);
+    setIsCropped(true);
+    setPanX(0);
+    setPanY(0);
+    setRotation(0);
+    setZoom(1.0);
+  };
+
+  const handleResetOriginal = () => {
+    if (originalFile) {
+      setFile(originalFile);
+      setIsCropped(false);
+      setPanX(0);
+      setPanY(0);
       setRotation(0);
       setZoom(1.0);
     }
@@ -282,6 +326,10 @@ export default function ResizerEngine({
       previousDataUrlRef.current = null;
     }
     setFile(null);
+    setOriginalFile(null);
+    setIsCropped(false);
+    setPanX(0);
+    setPanY(0);
     setResult(null);
     setRotation(0);
     setZoom(1.0);
@@ -612,14 +660,41 @@ export default function ResizerEngine({
                 </button>
               </div>
 
-              {/* Adjustments Toolbar: Rotate & Zoom */}
+              {/* Adjustments Toolbar: Crop, Rotate, Zoom & Face Guide */}
               <div className="flex flex-wrap items-center justify-between gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200/70 text-xs">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 flex-wrap">
+                  {/* Crop Tool Button */}
+                  <button
+                    type="button"
+                    onClick={() => setIsCropModalOpen(true)}
+                    aria-label="Crop and frame photo"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg shadow-2xs hover:shadow-xs transition-all cursor-pointer"
+                  >
+                    <Crop className="w-3.5 h-3.5" />
+                    <span>Crop Tool</span>
+                  </button>
+
+                  {/* Cropped Status Indicator & Reset */}
+                  {isCropped && (
+                    <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-emerald-800 bg-emerald-100/80 border border-emerald-300 px-2 py-1 rounded-lg">
+                      <span>✓ Cropped</span>
+                      <button
+                        type="button"
+                        onClick={handleResetOriginal}
+                        title="Revert back to uncropped original image"
+                        className="text-blue-700 hover:text-blue-900 underline font-black ml-0.5 cursor-pointer"
+                      >
+                        Reset
+                      </button>
+                    </span>
+                  )}
+
+                  {/* Rotate Button */}
                   <button
                     type="button"
                     onClick={handleRotate}
                     aria-label="Rotate image 90 degrees clockwise"
-                    className="inline-flex items-center gap-1 px-3 py-1.5 bg-white border border-slate-300 hover:border-slate-400 text-slate-800 font-bold rounded-lg shadow-2xs hover:bg-slate-50 transition-colors cursor-pointer"
+                    className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-white border border-slate-300 hover:border-slate-400 text-slate-800 font-bold rounded-lg shadow-2xs hover:bg-slate-50 transition-colors cursor-pointer"
                   >
                     <RotateCw className="w-3.5 h-3.5 text-blue-600" />
                     <span>Rotate 90°</span>
@@ -628,6 +703,23 @@ export default function ResizerEngine({
                     <span className="text-[11px] font-semibold text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded">
                       {rotation}°
                     </span>
+                  )}
+
+                  {/* Face Guide Toggle (in photo mode) */}
+                  {mode === 'photo' && (
+                    <button
+                      type="button"
+                      onClick={() => setShowFaceGuidePreview(!showFaceGuidePreview)}
+                      aria-label="Toggle official 70-80% face guide overlay"
+                      className={`inline-flex items-center gap-1 px-2.5 py-1.5 font-bold rounded-lg border shadow-2xs transition-colors cursor-pointer ${
+                        showFaceGuidePreview
+                          ? 'bg-amber-100 text-amber-950 border-amber-300'
+                          : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50'
+                      }`}
+                    >
+                      <User className="w-3.5 h-3.5 text-amber-600" />
+                      <span>Face Guide</span>
+                    </button>
                   )}
                 </div>
 
@@ -639,11 +731,11 @@ export default function ResizerEngine({
                     type="range"
                     aria-label="Adjust zoom level"
                     min="0.8"
-                    max="2.0"
+                    max="2.5"
                     step="0.05"
                     value={zoom}
                     onChange={(e) => setZoom(parseFloat(e.target.value))}
-                    className="w-24 sm:w-32 accent-blue-600 cursor-pointer"
+                    className="w-20 sm:w-28 accent-blue-600 cursor-pointer"
                   />
                   <span className="text-[11px] font-mono font-bold text-slate-700 w-9">
                     {Math.round(zoom * 100)}%
@@ -672,8 +764,25 @@ export default function ResizerEngine({
                       <img
                         src={result.dataUrl}
                         alt="Resized Sarkari Photo Preview"
-                        className="max-h-[280px] w-auto object-contain rounded-lg shadow-2xs"
+                        className="max-h-[280px] w-auto object-contain rounded-lg shadow-2xs block"
                       />
+
+                      {/* Official 70-80% Face Guide Overlay */}
+                      {mode === 'photo' && showFaceGuidePreview && (
+                        <div className="absolute inset-2 pointer-events-none flex items-center justify-center">
+                          <div className="w-[72%] h-[78%] rounded-full border-2 border-dashed border-amber-500 bg-amber-400/10 flex flex-col items-center justify-between py-2 shadow-inner">
+                            <span className="text-[9px] font-black text-amber-950 bg-amber-200/90 px-1 rounded uppercase">
+                              Head Top
+                            </span>
+                            <span className="text-[9px] font-black text-amber-950 bg-amber-200/90 px-1 rounded uppercase">
+                              70-80% Face Zone
+                            </span>
+                            <span className="text-[9px] font-black text-amber-950 bg-amber-200/90 px-1 rounded uppercase">
+                              Chin Line
+                            </span>
+                          </div>
+                        </div>
+                      )}
                     </div>
 
                     {/* Compression Savings Comparison */}
@@ -815,6 +924,19 @@ export default function ResizerEngine({
           </div>
         </div>
       </div>
+
+      {/* Interactive Aspect-Ratio Locked Crop Modal */}
+      {file && (
+        <CropModal
+          isOpen={isCropModalOpen}
+          onClose={() => setIsCropModalOpen(false)}
+          file={originalFile || file}
+          targetWidth={targetWidth}
+          targetHeight={targetHeight}
+          onApplyCrop={handleApplyCrop}
+          mode={mode}
+        />
+      )}
     </div>
   );
 }
