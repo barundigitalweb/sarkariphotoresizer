@@ -487,49 +487,45 @@ export default function ResizerEngine({
             type="button"
             onClick={() => setMode('photo')}
             aria-label="Switch to Passport Photo Resizer mode"
-            className={`flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 cursor-pointer ${
+            className={`flex items-center justify-center gap-1.5 py-2.5 px-2.5 rounded-xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all duration-200 cursor-pointer ${
               mode === 'photo'
                 ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-500/25'
                 : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
             }`}
           >
             <ImageIcon className="w-4 h-4 text-blue-200 shrink-0" />
-            <span className="truncate">{t.photoTab}</span>
-            <span className="hidden xl:inline-block text-[10px] font-bold bg-blue-900/60 border border-blue-400/40 text-blue-100 px-1.5 py-0.2 rounded-full">
-              20-50K
-            </span>
+            <span>{lang === 'hi' ? 'फोटो' : 'Photo'}</span>
+            <span className="text-[10px] font-medium opacity-80">(20-50K)</span>
           </button>
 
           <button
             type="button"
             onClick={() => setMode('signature')}
             aria-label="Switch to Signature Resizer mode"
-            className={`flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 cursor-pointer ${
+            className={`flex items-center justify-center gap-1.5 py-2.5 px-2.5 rounded-xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all duration-200 cursor-pointer ${
               mode === 'signature'
                 ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-500/25'
                 : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
             }`}
           >
             <PenTool className="w-4 h-4 text-blue-200 shrink-0" />
-            <span className="truncate">{t.sigTab}</span>
-            <span className="hidden xl:inline-block text-[10px] font-bold bg-blue-900/60 border border-blue-400/40 text-blue-100 px-1.5 py-0.2 rounded-full">
-              10-20K
-            </span>
+            <span>{lang === 'hi' ? 'हस्ताक्षर' : 'Signature'}</span>
+            <span className="text-[10px] font-medium opacity-80">(10-20K)</span>
           </button>
 
           <button
             type="button"
             onClick={() => setMode('document')}
             aria-label="Switch to Certificate / Document PDF Resizer mode"
-            className={`flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 cursor-pointer ${
+            className={`flex items-center justify-center gap-1.5 py-2.5 px-2.5 rounded-xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all duration-200 cursor-pointer ${
               mode === 'document'
                 ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md shadow-emerald-500/25'
                 : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
             }`}
           >
             <FileText className="w-4 h-4 text-emerald-200 shrink-0" />
-            <span className="truncate">{t.docTab}</span>
-            <span className="hidden xl:inline-block text-[10px] font-bold bg-emerald-900/60 border border-emerald-400/40 text-emerald-100 px-1.5 py-0.2 rounded-full">
+            <span>{lang === 'hi' ? 'दस्तावेज़' : 'Certificate'}</span>
+            <span className="text-[10px] font-black bg-emerald-900/80 border border-emerald-400/40 text-emerald-100 px-1.5 py-0.2 rounded">
               PDF
             </span>
           </button>
@@ -538,15 +534,15 @@ export default function ResizerEngine({
             type="button"
             onClick={() => setMode('thumb')}
             aria-label="Switch to Left Thumb Impression LTI mode"
-            className={`flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 cursor-pointer ${
+            className={`flex items-center justify-center gap-1.5 py-2.5 px-2.5 rounded-xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all duration-200 cursor-pointer ${
               mode === 'thumb'
                 ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md shadow-purple-500/25'
                 : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
             }`}
           >
             <Fingerprint className="w-4 h-4 text-purple-200 shrink-0" />
-            <span className="truncate">{t.thumbTab}</span>
-            <span className="hidden xl:inline-block text-[10px] font-bold bg-purple-900/60 border border-purple-400/40 text-purple-100 px-1.5 py-0.2 rounded-full">
+            <span>{lang === 'hi' ? 'अंगूठा' : 'Thumb'}</span>
+            <span className="text-[10px] font-black bg-purple-900/80 border border-purple-400/40 text-purple-100 px-1.5 py-0.2 rounded">
               LTI
             </span>
           </button>
