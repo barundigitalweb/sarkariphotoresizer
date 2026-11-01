@@ -3,21 +3,21 @@ const currentYear = new Date().getFullYear();
 ---
 <footer class="bg-slate-900 text-slate-300 border-t border-slate-800 mt-16 pt-12 pb-8">
   <div class="max-w-6xl mx-auto px-4">
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-8 pb-10 border-b border-slate-800">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 pb-10 border-b border-slate-800">
       <!-- Col 1: About Brand -->
-      <div class="md:col-span-2 space-y-3">
+      <div class="space-y-3">
         <div class="flex items-center gap-2">
           <div class="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-base">
             ⚡
           </div>
-          <span class="text-lg font-black text-white">SarkariPhotoResizer.com</span>
+          <span class="text-base font-black text-white">SarkariPhotoResizer</span>
         </div>
-        <p class="text-xs text-slate-400 leading-relaxed max-w-md">
-          SarkariPhotoResizer.com is a free, high-speed, 100% private online utility designed for Indian competitive exam applicants (SSC, UPSC, Railway, Banking, Police, State PSCs). All photos, signatures, and certificates are compressed client-side inside your browser without uploading to any remote server.
+        <p class="text-xs text-slate-400 leading-relaxed">
+          Free, fast, and 100% private online image compressor for Indian competitive exam applicants. Photos and signatures are processed entirely inside your browser memory.
         </p>
-        <div class="inline-flex items-center gap-2 text-xs text-emerald-400 bg-emerald-950/60 border border-emerald-800 px-2.5 py-1 rounded-md">
+        <div class="inline-flex items-center gap-1.5 text-[11px] text-emerald-400 bg-emerald-950/60 border border-emerald-800 px-2 py-1 rounded-md">
           <span>🔒</span>
-          <span>Zero Server Uploads • 100% Safe &amp; On-Device Processing</span>
+          <span>Zero Server Uploads • 100% Private</span>
         </div>
       </div>
 
@@ -28,13 +28,13 @@ const currentYear = new Date().getFullYear();
           <li><a href="/#tool" class="hover:text-white transition-colors">SSC Photo Resizer (20KB - 50KB)</a></li>
           <li><a href="/#tool" class="hover:text-white transition-colors">SSC Signature Resizer (10KB - 20KB)</a></li>
           <li><a href="/#tool" class="hover:text-white transition-colors">Railway RRB Photo Resizer</a></li>
-          <li><a href="/#tool" class="hover:text-white transition-colors">UPSC IAS / NDA Photo Resizer</a></li>
+          <li><a href="/#tool" class="hover:text-white transition-colors">UPSC IAS / NDA Photo (with DOP)</a></li>
           <li><a href="/#tool" class="hover:text-white transition-colors">IBPS / SBI Clerk Photo Resizer</a></li>
-          <li><a href="/#tool" class="hover:text-white transition-colors">UP Police / WB Police Resizer</a></li>
+          <li><a href="/#tool" class="hover:text-white transition-colors">NTA NEET &amp; JEE Main Resizer</a></li>
         </ul>
       </div>
 
-      <!-- Col 3: Legal & Trust (Essential for AdSense) -->
+      <!-- Col 3: Legal & Trust -->
       <div class="space-y-3">
         <h4 class="text-xs font-black text-white uppercase tracking-wider">Company &amp; Legal</h4>
         <ul class="space-y-2 text-xs text-slate-400">
@@ -44,6 +44,37 @@ const currentYear = new Date().getFullYear();
           <li><a href="/disclaimer" class="hover:text-white transition-colors">Disclaimer</a></li>
           <li><a href="/contact" class="hover:text-white transition-colors">Contact Us</a></li>
         </ul>
+      </div>
+
+      <!-- Col 4: Help & Support Contact -->
+      <div class="space-y-3">
+        <h4 class="text-xs font-black text-white uppercase tracking-wider">Help &amp; Support</h4>
+        <p class="text-xs text-slate-400 leading-relaxed">
+          Need assistance or want to suggest new exam specifications? Reach out anytime:
+        </p>
+        <div class="space-y-2 pt-1 text-xs">
+          <a
+            href="mailto:support@sarkariphotoresizer.com"
+            class="flex items-center gap-2 p-2.5 rounded-xl bg-slate-800/80 border border-slate-700/80 hover:border-blue-500 text-blue-400 hover:text-white transition-all group"
+          >
+            <span class="text-sm">✉️</span>
+            <div>
+              <div class="text-[10px] uppercase font-bold text-slate-400">Support Desk</div>
+              <div class="font-bold text-xs text-slate-200 group-hover:text-blue-300">support@sarkariphotoresizer.com</div>
+            </div>
+          </a>
+
+          <a
+            href="mailto:contact@sarkariphotoresizer.com"
+            class="flex items-center gap-2 p-2.5 rounded-xl bg-slate-800/80 border border-slate-700/80 hover:border-indigo-500 text-indigo-400 hover:text-white transition-all group"
+          >
+            <span class="text-sm">💼</span>
+            <div>
+              <div class="text-[10px] uppercase font-bold text-slate-400">General Inquiries</div>
+              <div class="font-bold text-xs text-slate-200 group-hover:text-indigo-300">contact@sarkariphotoresizer.com</div>
+            </div>
+          </a>
+        </div>
       </div>
     </div>
 
