@@ -99,14 +99,26 @@ const schemaData = {
     <link rel="manifest" href="/site.webmanifest" />
     <link rel="canonical" href={canonicalUrl} />
 
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EHFE6MDWW0"></script>
+    <!-- Non-blocking Google Analytics GA4 with requestIdleCallback -->
     <script is:inline>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-EHFE6MDWW0');
+
+      function loadGA() {
+        if (window._gaLoaded) return;
+        window._gaLoaded = true;
+        const script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=G-EHFE6MDWW0';
+        document.head.appendChild(script);
+      }
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(loadGA, { timeout: 2500 });
+      } else {
+        window.addEventListener('load', loadGA, { once: true });
+      }
     </script>
 
     <!-- Primary Meta Tags -->
@@ -137,10 +149,21 @@ const schemaData = {
     <meta property="twitter:description" content={description} />
     <meta property="twitter:image" content={`${siteUrl}/og-image.jpg`} />
 
-    <!-- Google Fonts Preconnect -->
+    <!-- Non-blocking Google Fonts with preconnect & preload -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      />
+    </noscript>
 
     <!-- Structured Data JSON-LD (WebApplication + Organization + HowTo Schema) -->
     <script type="application/ld+json" set:html={JSON.stringify(schemaData)} />
