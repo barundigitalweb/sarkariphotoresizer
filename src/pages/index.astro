@@ -7,54 +7,49 @@ import { ShieldCheck, Zap, CheckCircle2, Star, Award, Smartphone, FileCheck } fr
 ---
 
 <Layout>
-  <!-- Hero Header Section -->
-  <section class="relative bg-gradient-to-b from-blue-900 via-slate-900 to-slate-900 text-white pt-12 pb-24 px-4 overflow-hidden">
+  <!-- Hero Header Section (Compact on mobile for instant tool access) -->
+  <section class="relative bg-gradient-to-b from-blue-900 via-slate-900 to-slate-900 text-white pt-6 pb-14 sm:pt-12 sm:pb-24 px-4 overflow-hidden">
     <!-- Subtle Background Glows -->
     <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-blue-500/10 blur-3xl pointer-events-none rounded-full"></div>
 
-    <div class="max-w-4xl mx-auto text-center relative z-10 space-y-4">
+    <div class="max-w-4xl mx-auto text-center relative z-10 space-y-2.5 sm:space-y-4">
       <!-- Top Pill -->
-      <div class="inline-flex items-center gap-2 bg-blue-500/20 border border-blue-400/30 text-blue-200 px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider backdrop-blur-md">
-        <span>⚡ 100% Free • No Signup • No Watermark</span>
+      <div class="inline-flex items-center gap-2 bg-blue-500/20 border border-blue-400/30 text-blue-200 px-3 py-0.5 rounded-full text-[11px] sm:text-xs font-black uppercase tracking-wider backdrop-blur-md">
+        <span>⚡ 100% Free • No Signup • Private</span>
       </div>
 
       <!-- Main Headline (Targeting primary H1 keyword) -->
-      <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight">
+      <h1 class="text-2xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight">
         Sarkari <span class="bg-gradient-to-r from-blue-400 via-sky-300 to-indigo-300 bg-clip-text text-transparent">Photo &amp; Signature</span> Resizer
       </h1>
 
       <!-- Subtitle -->
-      <p class="text-sm sm:text-base lg:text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed">
-        Fast, on-device image compressor for Indian competitive exams. Automatically locks photos between 
-        <strong class="text-white">20 KB &amp; 50 KB</strong>, signatures to <strong class="text-white">10 KB &amp; 20 KB</strong> with official passport dimensions and Name-Date (DOP).
+      <p class="text-xs sm:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed">
+        Instantly lock passport photos to <strong class="text-white">20 KB - 50 KB</strong> &amp; signatures to <strong class="text-white">10 KB - 20 KB</strong> with official 3.5×4.5 cm dimensions and Name-Date (DOP).
       </p>
 
-      <!-- Trust Badges Row -->
-      <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-6 pt-2 text-xs text-slate-300 font-semibold">
-        <span class="flex items-center gap-1.5 bg-slate-800/60 px-3 py-1 rounded-lg border border-slate-700/60">
-          <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-          <span>SSC, Railway, UPSC, NTA Presets</span>
+      <!-- Trust Badges Row (Inline on mobile, takes only 1 line) -->
+      <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-4 pt-1 text-[11px] sm:text-xs text-slate-300 font-semibold">
+        <span class="inline-flex items-center gap-1 bg-slate-800/80 px-2.5 py-1 rounded-lg border border-slate-700/60">
+          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+          <span>SSC, RRB, UPSC, NTA</span>
         </span>
-        <span class="flex items-center gap-1.5 bg-slate-800/60 px-3 py-1 rounded-lg border border-slate-700/60">
-          <ShieldCheck className="w-4 h-4 text-blue-400" />
-          <span>Zero Server Uploads (100% Private)</span>
+        <span class="inline-flex items-center gap-1 bg-slate-800/80 px-2.5 py-1 rounded-lg border border-slate-700/60">
+          <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
+          <span>100% Client-Side Private</span>
         </span>
-        <span class="flex items-center gap-1.5 bg-slate-800/60 px-3 py-1 rounded-lg border border-slate-700/60">
+        <span class="inline-flex items-center gap-1 bg-slate-800/80 px-2.5 py-1 rounded-lg border border-slate-700/60">
           <div class="flex text-amber-400">
-            <Star className="w-3.5 h-3.5 fill-current" />
-            <Star className="w-3.5 h-3.5 fill-current" />
-            <Star className="w-3.5 h-3.5 fill-current" />
-            <Star className="w-3.5 h-3.5 fill-current" />
-            <Star className="w-3.5 h-3.5 fill-current" />
+            <Star className="w-3 h-3 fill-current" />
           </div>
-          <span>4.9/5 (2,480+ Candidates)</span>
+          <span>4.9/5 Rating</span>
         </span>
       </div>
     </div>
   </section>
 
   <!-- Interactive Resizer Tool Container (Overlapping Hero) -->
-  <section id="tool" class="max-w-6xl mx-auto px-4 -mt-14 relative z-20 mb-16">
+  <section id="tool" class="max-w-6xl mx-auto px-4 -mt-8 sm:-mt-14 relative z-20 mb-12 sm:mb-16">
     <ResizerEngine client:idle />
   </section>
 

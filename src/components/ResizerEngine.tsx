@@ -289,8 +289,8 @@ export default function ResizerEngine() {
 
       {/* 2. Main Processing Deck */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Left Column: Preset & Parameter Controls (5 cols) */}
-        <div className="lg:col-span-5 space-y-5">
+        {/* Left Column: Preset & Parameter Controls (5 cols, order-2 on mobile so Upload box is first) */}
+        <div className="lg:col-span-5 space-y-5 order-2 lg:order-1">
           {/* Preset Selector Card */}
           <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 space-y-4">
             <div className="flex items-center justify-between">
@@ -483,8 +483,35 @@ export default function ResizerEngine() {
           </div>
         </div>
 
-        {/* Right Column: Upload, Processing & Download Deck (7 cols) */}
-        <div className="lg:col-span-7 space-y-5">
+        {/* Right Column: Upload, Processing & Download Deck (7 cols, order-1 on mobile for instant above-the-fold access) */}
+        <div className="lg:col-span-7 space-y-4 sm:space-y-5 order-1 lg:order-2">
+          {/* Mobile-Only Quick Exam Selector Bar */}
+          <div className="lg:hidden flex items-center justify-between p-3 bg-white rounded-2xl border border-slate-200/80 shadow-2xs">
+            <div className="pr-2">
+              <span className="text-[10px] uppercase font-bold text-slate-500 block">Target Exam</span>
+              <span className="text-xs font-black text-slate-900 block truncate max-w-[200px]">
+                {currentPreset.name.split('(')[0]}
+              </span>
+              <span className="text-[10px] text-blue-600 font-bold block">
+                {mode === 'photo'
+                  ? `${currentPreset.photo.minKb}-${currentPreset.photo.maxKb} KB`
+                  : `${currentPreset.signature.minKb}-${currentPreset.signature.maxKb} KB`}
+              </span>
+            </div>
+            <select
+              value={selectedPresetId}
+              onChange={(e) => setSelectedPresetId(e.target.value)}
+              aria-label="Change target examination preset"
+              className="text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200 rounded-xl px-2.5 py-2 outline-none cursor-pointer shrink-0"
+            >
+              {EXAM_PRESETS.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.badge} - {p.name.split('(')[0]}
+                </option>
+              ))}
+            </select>
+          </div>
+
           {/* Upload Dropzone or Output View */}
           {!file ? (
             <div
