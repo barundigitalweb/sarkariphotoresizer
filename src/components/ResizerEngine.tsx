@@ -334,6 +334,16 @@ export default function ResizerEngine({
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.files?.[0];
     if (selected) {
+      if (selected.type === 'application/pdf' || selected.name.toLowerCase().endsWith('.pdf')) {
+        setErrorMsg(
+          lang === 'hi'
+            ? '⚠️ आपने PDF फ़ाइल चुनी है। यह टूल मार्कशीट/सर्टिफिकेट की फोटो (JPG/PNG) को 100-300 KB PDF में बदलता है। कृपया अपने सर्टिफिकेट की फोटो (JPG বা PNG) अपलोड करें।'
+            : '⚠️ You selected a PDF file. This tool converts photos or scans (JPG or PNG) of marksheets & certificates into compliant 100-300 KB PDF files. Please upload a photo/image of your document.'
+        );
+        if (fileInputRef.current) fileInputRef.current.value = '';
+        return;
+      }
+      setErrorMsg('');
       setFile(selected);
       setOriginalFile(selected);
       setIsCropped(false);
@@ -347,14 +357,25 @@ export default function ResizerEngine({
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     const dropped = e.dataTransfer.files?.[0];
-    if (dropped && dropped.type.startsWith('image/')) {
-      setFile(dropped);
-      setOriginalFile(dropped);
-      setIsCropped(false);
-      setPanX(0);
-      setPanY(0);
-      setRotation(0);
-      setZoom(1.0);
+    if (dropped) {
+      if (dropped.type === 'application/pdf' || dropped.name.toLowerCase().endsWith('.pdf')) {
+        setErrorMsg(
+          lang === 'hi'
+            ? '⚠️ आपने PDF फ़ाइल डाली है। यह टूल मार्कशीट/सर्टिफिकेट की फोटो (JPG/PNG) को 100-300 KB PDF में बदलता है। कृपया अपने सर्टिफिकेट की फोटो (JPG বা PNG) अपलोड करें।'
+            : '⚠️ You dropped a PDF file. This tool converts photos or scans (JPG or PNG) of marksheets & certificates into compliant 100-300 KB PDF files. Please upload a photo/image of your document.'
+        );
+        return;
+      }
+      if (dropped.type.startsWith('image/')) {
+        setErrorMsg('');
+        setFile(dropped);
+        setOriginalFile(dropped);
+        setIsCropped(false);
+        setPanX(0);
+        setPanY(0);
+        setRotation(0);
+        setZoom(1.0);
+      }
     }
   };
 
@@ -791,6 +812,14 @@ export default function ResizerEngine({
             </select>
           </div>
 
+          {/* Error / Guidance Message when no file selected */}
+          {!file && errorMsg && (
+            <div className="p-4 bg-amber-50 border border-amber-300 rounded-2xl text-amber-900 text-xs sm:text-sm font-semibold flex items-start gap-2.5 shadow-sm">
+              <AlertTriangle className="w-5 h-5 shrink-0 text-amber-600 mt-0.5" />
+              <span>{errorMsg}</span>
+            </div>
+          )}
+
           {/* Upload Dropzone or Output View */}
           {!file ? (
             <div
@@ -818,18 +847,26 @@ export default function ResizerEngine({
                 )}
               </div>
               <h2 className="text-lg sm:text-xl font-black text-slate-900 mb-1">
-                {t.uploadHeading(
-                  mode === 'photo'
-                    ? t.photoTab
-                    : mode === 'signature'
-                    ? t.sigTab
-                    : mode === 'document'
-                    ? t.docTab
-                    : t.thumbTab
-                )}
+                {mode === 'document'
+                  ? lang === 'hi'
+                    ? 'प्रमाणपत्र या मार्कशीट की फोटो अपलोड करें'
+                    : 'Upload Certificate Photo (Converts to PDF)'
+                  : mode === 'thumb'
+                  ? lang === 'hi'
+                    ? 'अंगूठे का निशान (LTI) अपलोड करें'
+                    : 'Upload Thumb Impression (LTI)'
+                  : t.uploadHeading(mode === 'photo' ? t.photoTab : t.sigTab)}
               </h2>
               <p className="text-xs sm:text-sm text-slate-600 max-w-sm mb-4 leading-relaxed">
-                {t.uploadSub}
+                {mode === 'document'
+                  ? lang === 'hi'
+                    ? 'मार्कशीट या जाति प्रमाणपत्र की फोटो (JPG, PNG) अपलोड करें। यह स्वतः 100-300 KB PDF में बदल जाएगी।'
+                    : 'Upload a photo or scan (JPG, PNG) of your marksheet or certificate to convert into a 100-300 KB PDF.'
+                  : mode === 'thumb'
+                  ? lang === 'hi'
+                    ? 'सफेद कागज पर लगे अंगूठे के निशान की फोटो अपलोड करें।'
+                    : 'Upload photo of your thumb impression on clean white paper.'
+                  : t.uploadSub}
               </p>
               <button
                 type="button"
