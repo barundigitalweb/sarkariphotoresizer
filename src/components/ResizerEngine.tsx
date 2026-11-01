@@ -18,7 +18,9 @@ import {
   User,
   Copy,
   ZoomIn,
-  Check
+  Check,
+  Share2,
+  ArrowRight
 } from 'lucide-react';
 
 export default function ResizerEngine() {
@@ -77,6 +79,27 @@ export default function ResizerEngine() {
         URL.revokeObjectURL(previousDataUrlRef.current);
       }
     };
+  }, []);
+
+  // Global Ctrl+V clipboard paste support (Huge for Cyber Cafes & Desktop Users)
+  useEffect(() => {
+    const handlePaste = (e: ClipboardEvent) => {
+      const items = e.clipboardData?.items;
+      if (!items) return;
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].type.startsWith('image/')) {
+          const pastedFile = items[i].getAsFile();
+          if (pastedFile) {
+            setFile(pastedFile);
+            setRotation(0);
+            setZoom(1.0);
+            break;
+          }
+        }
+      }
+    };
+    window.addEventListener('paste', handlePaste);
+    return () => window.removeEventListener('paste', handlePaste);
   }, []);
 
   // Re-process image when parameters change
@@ -183,7 +206,6 @@ export default function ResizerEngine() {
   const handleCopy = async () => {
     if (!result) return;
     try {
-      // In modern browsers, write PNG/JPEG to clipboard
       const response = await fetch(result.dataUrl);
       const blob = await response.blob();
       await navigator.clipboard.write([
@@ -192,9 +214,15 @@ export default function ResizerEngine() {
       setCopied(true);
       setTimeout(() => setCopied(false), 2500);
     } catch {
-      // Fallback: alert
       setCopied(false);
     }
+  };
+
+  const handleShareWhatsApp = () => {
+    const text = encodeURIComponent(
+      '🔥 Free Sarkari Photo (20KB-50KB) & Signature (10KB-20KB) Resizer for SSC, Railway, UPSC & Banking: https://sarkariphotoresizer.com'
+    );
+    window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
   };
 
   const handleReset = () => {
@@ -208,6 +236,12 @@ export default function ResizerEngine() {
     setZoom(1.0);
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
+
+  const originalSizeKb = file ? Math.round((file.size / 1024) * 10) / 10 : 0;
+  const reductionPercent =
+    file && result && originalSizeKb > 0 && originalSizeKb > result.sizeKb
+      ? Math.round(((originalSizeKb - result.sizeKb) / originalSizeKb) * 100)
+      : 0;
 
   return (
     <div className="w-full max-w-5xl mx-auto space-y-6">
@@ -444,8 +478,8 @@ export default function ResizerEngine() {
               <h3 className="text-lg sm:text-xl font-black text-slate-900 mb-1">
                 Upload {mode === 'photo' ? 'Passport Photo' : 'Signature'}
               </h3>
-              <p className="text-xs sm:text-sm text-slate-500 max-w-sm mb-4">
-                Drag and drop your image here, or browse from device (JPG, PNG, WebP supported)
+              <p className="text-xs sm:text-sm text-slate-500 max-w-sm mb-4 leading-relaxed">
+                Drag and drop your image here, browse from device, or <span className="font-bold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded">Ctrl + V</span> to paste from clipboard
               </p>
               <button
                 type="button"
@@ -534,6 +568,20 @@ export default function ResizerEngine() {
                       />
                     </div>
 
+                    {/* Compression Savings Comparison */}
+                    {originalSizeKb > 0 && (
+                      <div className="flex items-center gap-2 text-[11px] text-slate-500 font-medium bg-white px-3 py-1 rounded-full border border-slate-200 shadow-2xs">
+                        <span>Original: <strong>{originalSizeKb} KB</strong></span>
+                        <ArrowRight className="w-3 h-3 text-slate-400" />
+                        <span className="text-blue-600 font-bold">New: {result.sizeKb} KB</span>
+                        {reductionPercent > 0 && (
+                          <span className="bg-emerald-100 text-emerald-800 text-[10px] font-black px-1.5 py-0.2 rounded-full">
+                            -{reductionPercent}%
+                          </span>
+                        )}
+                      </div>
+                    )}
+
                     {/* Quality & Size Compliance Badge */}
                     <div
                       className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black ${
@@ -573,7 +621,7 @@ export default function ResizerEngine() {
                       type="button"
                       onClick={handleCopy}
                       className="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs sm:text-sm py-3 px-4 rounded-2xl border border-slate-300 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
-                      title="Copy to clipboard"
+                      title="Copy image to clipboard"
                     >
                       {copied ? (
                         <>
@@ -587,10 +635,20 @@ export default function ResizerEngine() {
                         </>
                       )}
                     </button>
+
+                    <button
+                      type="button"
+                      onClick={handleShareWhatsApp}
+                      className="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold text-xs sm:text-sm py-3 px-3.5 rounded-2xl border border-emerald-300 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                      title="Share with friends on WhatsApp"
+                    >
+                      <Share2 className="w-4 h-4" />
+                      <span className="hidden sm:inline">WhatsApp</span>
+                    </button>
                   </div>
 
                   <div className="flex items-center justify-center gap-2 text-[11px] text-slate-500 font-semibold text-center">
-                    <span>✅ Ready to upload to SSC, Railway, UPSC, NTA, Police &amp; Banking portals.</span>
+                    <span>✅ 100% compliant &amp; ready to upload to official exam portals.</span>
                   </div>
                 </div>
               )}

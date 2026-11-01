@@ -1,0 +1,17 @@
+{
+  "name": "Sarkari Photo & Signature Resizer",
+  "short_name": "Sarkari Resizer",
+  "description": "Fast & Free 20KB-50KB Photo & Signature Resizer for Govt Exams",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0e8fe9",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
