@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { EXAM_PRESETS, type ExamPreset } from '../lib/presets';
 import { processImage, type ProcessImageResult, type ResizerMode } from '../lib/image-processor';
+import { convertPdfPageToImageFile } from '../lib/pdf-renderer';
 import CropModal from './CropModal';
 import {
   Upload,
@@ -37,10 +38,10 @@ export interface ResizerEngineProps {
 
 const translations = {
   en: {
-    photoTab: 'Passport Photo',
+    photoTab: 'Photo',
     sigTab: 'Signature',
-    docTab: 'Certificate (PDF)',
-    thumbTab: 'Thumb (LTI)',
+    docTab: 'Doc to PDF',
+    thumbTab: 'Thumb',
     targetExam: 'Target Exam',
     specHeader: 'Exam Specs & Custom Size',
     minKb: 'Min KB',
@@ -52,7 +53,7 @@ const translations = {
     photoDate: 'Date of Photograph (DD-MM-YYYY)',
     cleanBg: 'Auto-Clean Background & Shadows',
     cleanBgDesc: 'Removes paper shadows and yellow tints to output crisp dark marks on white.',
-    docInfo: 'Converts certificate image into standard single-page PDF (100 - 300 KB).',
+    docInfo: 'Converts certificate photo or existing PDF into compliant single-page PDF (100 - 300 KB).',
     uploadHeading: (m: string) => `Upload ${m}`,
     uploadSub: 'Drag & drop image here, browse from device, or paste with Ctrl + V',
     chooseBtn: 'Choose File from Device',
@@ -71,10 +72,10 @@ const translations = {
     ratingThankYou: 'Thank you for your rating! ⭐'
   },
   hi: {
-    photoTab: 'पासपोर्ट फोटो',
-    sigTab: 'हस्ताक्षर (Sign)',
-    docTab: 'दस्तावेज़ (PDF)',
-    thumbTab: 'अंगूठे का निशान (LTI)',
+    photoTab: 'फोटो',
+    sigTab: 'हस्ताक्षर',
+    docTab: 'दस्तावेज़ से PDF',
+    thumbTab: 'अंगूठा',
     targetExam: 'परीक्षा चुनें',
     specHeader: 'परीक्षा साइज़ और कस्टम सेटिंग',
     minKb: 'न्यूनतम KB',
@@ -86,7 +87,7 @@ const translations = {
     photoDate: 'फोटो खींचने की तारीख (DD-MM-YYYY)',
     cleanBg: 'बैकग्राउंड और छाया साफ करें',
     cleanBgDesc: 'मोबाइल कैमरे की छाया व पीलापन हटाकर सफेद कागज पर गहरा स्याही आउटपुट देता है।',
-    docInfo: 'प्रमाणपत्र या मार्कशीट को मानक एकल-पृष्ठ PDF (100 - 300 KB) में बदलता है।',
+    docInfo: 'प्रमाणपत्र की फोटो या PDF फ़ाइल को मानक एकल-पृष्ठ 100 - 300 KB PDF में बदलता है।',
     uploadHeading: (m: string) => `${m} अपलोड करें`,
     uploadSub: 'यहाँ फ़ाइल खींचकर डालें, डिवाइस से चुनें, या Ctrl + V से पेस्ट करें',
     chooseBtn: 'डिवाइस से फ़ाइल चुनें',
@@ -331,26 +332,52 @@ export default function ResizerEngine({
     panY
   ]);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selected = e.target.files?.[0];
-    if (selected) {
-      if (selected.type === 'application/pdf' || selected.name.toLowerCase().endsWith('.pdf')) {
+  const processIncomingFile = async (rawFile: File) => {
+    try {
+      if (rawFile.type === 'application/pdf' || rawFile.name.toLowerCase().endsWith('.pdf')) {
+        setIsProcessing(true);
         setErrorMsg(
           lang === 'hi'
-            ? '⚠️ आपने PDF फ़ाइल चुनी है। यह टूल मार्कशीट/सर्टिफिकेट की फोटो (JPG/PNG) को 100-300 KB PDF में बदलता है। कृपया अपने सर्टिफिकेट की फोटो (JPG বা PNG) अपलोड करें।'
-            : '⚠️ You selected a PDF file. This tool converts photos or scans (JPG or PNG) of marksheets & certificates into compliant 100-300 KB PDF files. Please upload a photo/image of your document.'
+            ? 'PDF दस्तावेज़ पढ़ा जा रहा है...'
+            : 'Reading certificate from PDF...'
         );
-        if (fileInputRef.current) fileInputRef.current.value = '';
+        const convertedFile = await convertPdfPageToImageFile(rawFile);
+        setErrorMsg('');
+        setFile(convertedFile);
+        setOriginalFile(convertedFile);
+        setIsCropped(false);
+        setPanX(0);
+        setPanY(0);
+        setRotation(0);
+        setZoom(1.0);
+        setIsProcessing(false);
         return;
       }
+
       setErrorMsg('');
-      setFile(selected);
-      setOriginalFile(selected);
+      setFile(rawFile);
+      setOriginalFile(rawFile);
       setIsCropped(false);
       setPanX(0);
       setPanY(0);
       setRotation(0);
       setZoom(1.0);
+    } catch (err: any) {
+      setIsProcessing(false);
+      setErrorMsg(
+        err?.message ||
+          (lang === 'hi'
+            ? 'फ़ाइल लोड करने में समस्या हुई। कृपया एक वैध इमेज या PDF अपलोड करें।'
+            : 'Failed to process file. Please upload a standard JPG, PNG, or PDF file.')
+      );
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selected = e.target.files?.[0];
+    if (selected) {
+      processIncomingFile(selected);
     }
   };
 
@@ -358,24 +385,7 @@ export default function ResizerEngine({
     e.preventDefault();
     const dropped = e.dataTransfer.files?.[0];
     if (dropped) {
-      if (dropped.type === 'application/pdf' || dropped.name.toLowerCase().endsWith('.pdf')) {
-        setErrorMsg(
-          lang === 'hi'
-            ? '⚠️ आपने PDF फ़ाइल डाली है। यह टूल मार्कशीट/सर्टिफिकेट की फोटो (JPG/PNG) को 100-300 KB PDF में बदलता है। कृपया अपने सर्टिफिकेट की फोटो (JPG বা PNG) अपलोड करें।'
-            : '⚠️ You dropped a PDF file. This tool converts photos or scans (JPG or PNG) of marksheets & certificates into compliant 100-300 KB PDF files. Please upload a photo/image of your document.'
-        );
-        return;
-      }
-      if (dropped.type.startsWith('image/')) {
-        setErrorMsg('');
-        setFile(dropped);
-        setOriginalFile(dropped);
-        setIsCropped(false);
-        setPanX(0);
-        setPanY(0);
-        setRotation(0);
-        setZoom(1.0);
-      }
+      processIncomingFile(dropped);
     }
   };
 
@@ -516,7 +526,7 @@ export default function ResizerEngine({
           <button
             type="button"
             onClick={() => setMode('document')}
-            aria-label="Switch to Certificate / Document PDF Resizer mode"
+            aria-label="Switch to Doc to PDF Resizer mode"
             className={`flex items-center justify-center gap-1.5 py-2.5 px-2.5 rounded-xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all duration-200 cursor-pointer ${
               mode === 'document'
                 ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md shadow-emerald-500/25'
@@ -524,10 +534,8 @@ export default function ResizerEngine({
             }`}
           >
             <FileText className="w-4 h-4 text-emerald-200 shrink-0" />
-            <span>{lang === 'hi' ? 'दस्तावेज़' : 'Certificate'}</span>
-            <span className="text-[10px] font-black bg-emerald-900/80 border border-emerald-400/40 text-emerald-100 px-1.5 py-0.2 rounded">
-              PDF
-            </span>
+            <span>{t.docTab}</span>
+            <span className="text-[10px] font-medium opacity-80">(100-300K)</span>
           </button>
 
           <button
@@ -542,9 +550,7 @@ export default function ResizerEngine({
           >
             <Fingerprint className="w-4 h-4 text-purple-200 shrink-0" />
             <span>{lang === 'hi' ? 'अंगूठा' : 'Thumb'}</span>
-            <span className="text-[10px] font-black bg-purple-900/80 border border-purple-400/40 text-purple-100 px-1.5 py-0.2 rounded">
-              LTI
-            </span>
+            <span className="text-[10px] font-medium opacity-80">(10-50K)</span>
           </button>
         </div>
 
@@ -829,7 +835,11 @@ export default function ResizerEngine({
                 ref={fileInputRef}
                 type="file"
                 aria-label="Upload photo, signature, or document file from device"
-                accept="image/jpeg,image/png,image/webp,image/jpg"
+                accept={
+                  mode === 'document'
+                    ? 'image/jpeg,image/png,image/webp,image/jpg,application/pdf,.pdf'
+                    : 'image/jpeg,image/png,image/webp,image/jpg'
+                }
                 onChange={handleFileChange}
                 className="hidden"
               />
@@ -845,8 +855,8 @@ export default function ResizerEngine({
               <h2 className="text-lg sm:text-xl font-black text-slate-900 mb-1">
                 {mode === 'document'
                   ? lang === 'hi'
-                    ? 'प्रमाणपत्र या मार्कशीट की फोटो अपलोड करें'
-                    : 'Upload Certificate Photo (Converts to PDF)'
+                    ? 'मार्कशीट, प्रमाणपत्र या दस्तावेज़ अपलोड करें'
+                    : 'Upload Marksheet, Certificate or Document'
                   : mode === 'thumb'
                   ? lang === 'hi'
                     ? 'अंगूठे का निशान (LTI) अपलोड करें'
@@ -856,8 +866,8 @@ export default function ResizerEngine({
               <p className="text-xs sm:text-sm text-slate-600 max-w-sm mb-4 leading-relaxed">
                 {mode === 'document'
                   ? lang === 'hi'
-                    ? 'मार्कशीट या जाति प्रमाणपत्र की फोटो (JPG, PNG) अपलोड करें। यह स्वतः 100-300 KB PDF में बदल जाएगी।'
-                    : 'Upload a photo or scan (JPG, PNG) of your marksheet or certificate to convert into a 100-300 KB PDF.'
+                    ? 'फोटो (JPG, PNG) या PDF फ़ाइल दोनों समर्थित हैं। स्वतः 100-300 KB PDF में बदल जाएगी।'
+                    : 'Supports JPG, PNG photo or PDF document. Automatically resizes & locks to 100-300 KB PDF.'
                   : mode === 'thumb'
                   ? lang === 'hi'
                     ? 'सफेद कागज पर लगे अंगूठे के निशान की फोटो अपलोड करें।'
