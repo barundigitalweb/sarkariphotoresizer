@@ -848,8 +848,8 @@ export default function ResizerEngine({
                 aria-label="Upload photo, signature, or document file from device"
                 accept={
                   mode === 'document'
-                    ? 'image/jpeg,image/png,image/webp,image/jpg,application/pdf,.pdf'
-                    : 'image/jpeg,image/png,image/webp,image/jpg'
+                    ? '.pdf,.jpg,.jpeg,.png,.webp,application/pdf,image/*'
+                    : '.jpg,.jpeg,.png,.webp,image/*'
                 }
                 onChange={handleFileChange}
                 className="hidden"

@@ -16,8 +16,11 @@ const {
 
 const siteUrl = 'https://sarkariphotoresizer.com';
 const rawPathname = Astro.url.pathname;
-const cleanPath = rawPathname === '/' ? '' : rawPathname.replace(/\/$/, '');
-const canonicalUrl = propCanonicalUrl || `${siteUrl}${cleanPath || '/'}`;
+// Ensure canonical URL always ends with a trailing slash matching Cloudflare Pages and Astro static directory routing
+const pathWithSlash = rawPathname.endsWith('/') ? rawPathname : `${rawPathname}/`;
+const canonicalUrl = propCanonicalUrl
+  ? (propCanonicalUrl.endsWith('/') ? propCanonicalUrl : `${propCanonicalUrl}/`)
+  : `${siteUrl}${pathWithSlash}`;
 
 const schemaData = {
   '@context': 'https://schema.org',
@@ -121,7 +124,7 @@ const schemaData = {
     <meta name="keywords" content="sarkari photo resizer, photo resizer 20kb to 50kb, signature resizer 10 to 20 kb, ssc photo resizer, ssc signature resize, name and date of photo maker, dop photo resizer, railway rrb photo size, up police photo signature resizer, nta neet photo resizer, photo compressor for govt exam" />
     <meta name="author" content="SarkariPhotoResizer.com" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-    <meta name="theme-color" content="#0e8fe9" />
+    <meta name="theme-color" content="#1d4ed8" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
